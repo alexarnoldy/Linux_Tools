@@ -15,4 +15,6 @@ Didn't work in Leap15 laptop with zypper install
 
 
 `sshuttle -r  admin@w.x.y.z:4001 -x  w.x.y.z:4001 0/0 -vv`
-- When port 4001 is a port forwarded by the remote firewall from 4001 to 22 on the remote server
+- When port 4001 is a port forwarded by the remote firewall from 4001 to 22 on the remote server  
+
+`curl ipinfo.io` - Gets the IP address being used by your system on the Internet
