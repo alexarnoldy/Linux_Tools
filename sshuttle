@@ -10,6 +10,9 @@ Didn't work in Leap15 laptop with zypper install
 -- Aside from that, only TCP traffic will be forwarded. No UDP, no ICMP
 - `-N` figures out which subnets the remote server can forward to
 - `-H` Tries to do hostname resolution from the remote server and temporarily stores that in the local /etc/hosts
+- Can add IP addresses or hostnames that specifically should be tunneled 
+-- Can be helpful when the remote server is in a different geo and a CDN network might send local requests to local server, but you wan to make sure your requests get services in the remote geo
+
 
 `sshuttle -r  admin@w.x.y.z:4001 -x  w.x.y.z:4001 0/0 -vv`
 - When port 4001 is a port forwarded by the remote firewall from 4001 to 22 on the remote server
