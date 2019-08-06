@@ -1,0 +1,75 @@
+​OpenVPN server:
+
+Install  epel repository -  yum install -y epel-release
+yum install -y openvpn  easy-rsa
+systemctl stop firewalld
+Need to ensure routing is enabled
+iptables -L -t nat    - to see if masquerade has been set up
+ iptables -t nat -A POSTROUTING -o <internal interface> -j MASQUERADE 
+Allows clients VPNing into the internal network to access internal systems with the internal IP of the VPN server, rather than have to discover the internal network.
+cp /usr/share/doc/openvpn<version>/sample/sample-config-files/server.conf   /etc/openvpn
+vi /etc/openvpn/server.conf
+; is used as a comment.
+Uncomment:  
+push "redirect-gateway....
+push "dhcp-option DNS
+Change DNS servers
+user nobody
+group nobody
+mkdir -p /etc/openvpn/easy-rsa/keys
+cp -rf  /usr/share/easy-rsa/2.0/*     /etc/openvpn/easy-rsa
+vi   /etc/openvpn/easy-rsa/vars
+KEY_NAME="server"
+KEY_CN="<FQDN of VPN server>"
+cd /etc/openvpn/easy-rsa
+cp openssl-1.0.0.cnf    openssl.cnf
+source ./vars
+./clean-all
+to clear out any keys that are in the keys directory
+./build-ca
+to build the Certificate Authority
+Populate values as needed
+Creates the public and private keys for the CA
+./build-key-server  <name of VPN server>
+Creates the public and private keys for the server
+Not sure if the values need to match those of the CA
+./build-dh
+To build the Diffie Hellman keys
+cd keys
+cp  dh2048.pem  ca.crt  server.crt server.key   /etc/openvpn
+.crt   are the public key 
+.key is the private key
+systemctl enable  openvpn@<name of server>
+systemctl start openvpn@<name of server>
+ip a    - shows the tun0 interface with the peer to peer network
+OpenVPN client:
+
+Still on the VPN server:
+cd    /etc/openvpn/easy-rsa
+source ./vars
+./build-key  <name of client>
+Default values come from the variables file
+cd keys 
+cp  client.key  client.crt   /etc/openvpn
+Just to make it easier to copy over all of the required files from one directory
+On the client:
+yum install -y openvpn
+mkdir  certs; cd certs
+scp   root@server2:/etc/openvpn/ca.crt    .
+scp   root@server2:/etc/openvpn/client.crt    .
+scp   root@server2:/etc/openvpn/client.key    .
+cp   /usr/share/doc/openvpn<version>/ sample/sample-config-files/client.conf    .
+vi   client.conf
+remote  <IP or resolvable server name>
+user nobody
+group nobody
+persist-key
+persist-tun
+ca  <path to ca.crt>
+cert <path to client.crt>
+key <path to client.key>
+comp-lzo
+enable compression of traffic
+openvpn  --config   <path to client.conf>
+ip a 
+Now has a   tun0 interface which shows the peer to peer network
