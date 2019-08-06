@@ -2,9 +2,9 @@
 
 ​​ssh -f    -L 8080:localhost:80   root@​remote-​server   -N
 Useful when wanting to create a secure connect between your client and a remote-server​
-Will only work if the remote-server can receive ssh connections ​
-Won't work if the  remote-server   is behind a firewall that blocks incoming SSH
-Won't work if the  remote-server   is behind a NAT router
+- Will only work if the remote-server can receive ssh connections ​
+-- Won't work if the  remote-server   is behind a firewall that blocks incoming SSH
+-- Won't work if the  remote-server   is behind a NAT router
 -f  runs in the background
 -L  runs a listener​/forwarder process ​on the ​local ​port (i.e. 8080)
 :localhost:80 Instructs the ssh process on the receiving server to forward the traffic to ​its ​port 80 
