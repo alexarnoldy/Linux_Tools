@@ -2,21 +2,22 @@
 
 ​​ssh -f    -L 8080:localhost:80   root@​remote-​server   -N
 Useful when wanting to create a secure connect between your client and a remote-server​
-- Will only work if the remote-server can receive ssh connections ​
--- Won't work if the  remote-server   is behind a firewall that blocks incoming SSH
--- Won't work if the  remote-server   is behind a NAT router
--f  runs in the background
--L  runs a listener​/forwarder process ​on the ​local ​port (i.e. 8080)
-:localhost:80 Instructs the ssh process on the receiving server to forward the traffic to ​its ​port 80 
--N  says we are not running a command on the remote server
-w3m http://localhost:8080    - to browse to the ​entrance of the tunnel on port 8080, which is forwarded to port 80 on the ​remote​-​server​
+* Will only work if the remote-server can receive ssh connections ​
+** Won't work if the  remote-server   is behind a firewall that blocks incoming SSH
+** Won't work if the  remote-server   is behind a NAT router
+* -f  runs in the background
+* -L  runs a listener​/forwarder process ​on the ​local ​port (i.e. 8080)
+** :localhost:80 Instructs the ssh process on the receiving server to forward the traffic to ​its ​port 80 
+* -N  says we are not running a command on the remote server
+*w3m http://localhost:8080    - to browse to the ​entrance of the tunnel on port 8080, which is forwarded to port 80 on the ​remote​-​server​
+
 ssh reverse tunnel:​
 
 ssh -R 2222:localhost:22 root@ssh-reachable-server 
 
 ​Useful when the server you want to reach is behind a firewall that blocks SSH, or behind a NAT router
-Command is run on the firewalled host so it can create an ESTABLISHED connection to root@​ssh-reachable-server
-Can use the same switches as -L
-Allows the  ssh-reachable-server​ to ssh back into the firewalled host​
+* Command is run on the firewalled host so it can create an ESTABLISHED connection to root@​ssh-reachable-server
+* Can use the same switches as -L
+* Allows the  ssh-reachable-server​ to ssh back into the firewalled host​
 
 Need to kill the ssh tunnel that is running the tunnel when done.
