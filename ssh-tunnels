@@ -1,4 +1,24 @@
-​ssh tunnel from the client to the server:
+Local (-L) versus remove (-R):
+* (I believe this is true, but haven't tested it) Tunnels allow for one way access (forwarding) from one system to another.
+* Tunnel is always started from the system that runs the inital ssh command, but has nothing to do with local versus remote
+* Local is used when the same system that initiated the tunnel will use its own localhost, or IP address to access the tunnel
+* Remote (or reverse) is used when the server that you're ssh'ing to will use its localhost, or IP to access the tunnel
+
+* -L and -R format are <IP to enter the tunnel>:<port to enter the tunnel>:<IP forwarded to on the other side of the tunnel>:<port forwarded to ...>
+** Can omit first IP, which means anyone can access the tunnel through the receiving system's port
+** Specifying the first IP restricts what system's can access the tunnel, but only if `GatewayPorts clientspecified` is set in the receiving server's sshd_config file
+
+* The LocalForward option in the OpenSSH client configuration file can be used to configure forwarding without having to specify it on command line
+
+* The AllowTcpForwarding option in the OpenSSH server configuration file must be enabled on the server to allow port forwarding. 
+** By default, forwarding is allowed. 
+** Possible values for this option are yes or all to allow all TCP forwarding, no to prevent all TCP forwarding, local to allow local forwardings, and remote to allow remote forwardings.
+
+* Can forward to multiple ports, even to different servers, inside the same tunnel:
+** ssh -R 2222:d76767.nyc.example.com:22 -R 5432:postgres3.nyc.example.com:5432 aws4.mydomain.net
+*** Would allow the remote system to ssh to one system through its port 2222 and access a postgreSQL database through its port 5432
+
+ssh tunnel from the client to the server:
 
 `ssh -f    -L 8080:localhost:80   root@remote-server   -N `
 Useful when wanting to create a secure connect between your client and a remote-server
@@ -16,8 +36,8 @@ ssh reverse tunnel:
 ssh -R 2222:localhost:22 root@ssh-reachable-server 
 
 Useful when the server you want to reach is behind a firewall that blocks SSH, or behind a NAT router
-* Command is run on the firewalled host so it can create an ESTABLISHED connection to root@ssh-reachable-server
+* Command is run on the host that cannot be reached via ssh (i.e. behind the firewall) so it can create an ESTABLISHED connection to root@ssh-reachable-server
 * Can use the same switches as -L
-* Allows the  ssh-reachable-server to ssh back into the firewalled host
+* Allows the  ssh-reachable-server (i.e. -R or remote) to ssh back into the firewalled host through its own localhost:2222
 
 Need to kill the ssh tunnel that is running the tunnel when done.
