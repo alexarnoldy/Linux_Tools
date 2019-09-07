@@ -1,0 +1,2 @@
+sudo virsh net-dhcp-leases default
+* See DHCP addresses leased on the network named default
