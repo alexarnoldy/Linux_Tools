@@ -2,6 +2,8 @@ sudo virsh net-dhcp-leases default
 * See DHCP addresses leased on the network named default
 
 https://computingforgeeks.com/virsh-commands-cheatsheet/
+* virt-ls and virt-cat 
+** To ls directories and cat files in a running VM
 
 virsh dominfo <name of domain>
 * Config of the VM
