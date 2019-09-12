@@ -8,6 +8,9 @@ https://computingforgeeks.com/virsh-commands-cheatsheet/
 virsh dominfo <name of domain>
 * Config of the VM
 
+sudo virsh domifaddr <name of domain>
+* IP and MAC of VM
+
 
 .Expand a .qcow2 image, plus the internal partitions and filesystems:
 * Likely won't work with snapshots of the image
