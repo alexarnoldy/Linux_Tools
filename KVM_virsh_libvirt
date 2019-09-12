@@ -13,8 +13,9 @@ sudo virsh domifaddr <name of domain>
 
 
 .Expand a .qcow2 image, plus the internal partitions and filesystems:
-* Likely won't work with snapshots of the image
+* Likely won't work if the image has snapshots
 * Seems like you need to do the whole procedure once for each partition that needs to be expanded
+
 * With the VM booted, use df -h to determine which partition number need to be expanded
 ** Note that they may be /dev/vda* but the libvirt commands will refer to them as /dev/sda. 
    The most important thing is the partition number.
@@ -30,13 +31,23 @@ sudo virsh domifaddr <name of domain>
 * Check the image:
 `qemu-img check -r all $IMAGE`
 
-* Expand the image. The variable below is a single number, i.e. 2 plus letter 
-  designator for megabytes, gigabytes, terabyes etc.:
+The variable below is a number, i.e. 2, plus a letter 
+  designator for megabytes, gigabytes, terabyes, i.e. G. 
+**  `export CAPACITY_TO_ADD=2G` would be used to add two gigabytes to the image:
 `export CAPACITY_TO_ADD=<#><M,G,T>`
+`qemu-img resize $IMAGE +$CAPACITY_TO_ADD`
 
+* Verify the logical image size has grown, though the partitions have not:
+`virt-filesystems --long -h --all -a $IMAGE`
+
+
+
+* Expand the partition and filesystem:
 `cp $IMAGE $IMAGE-orig`
-** Expand the partition and filesystem:
 `virt-resize --expand /dev/sda$PARTITION_NUMBER $IMAGE-orig $IMAGE`
+
+* Verify the correct partition has taken up the desired capacity
+`virt-filesystems --long -h --all -a $IMAGE`
 
 * Boot the image and verify the image, partition, and filesystem have been expanded
 ** If everything works, you can delete the $IMAGE-orig and the copy in /var/tmp/
