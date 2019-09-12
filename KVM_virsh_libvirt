@@ -7,3 +7,36 @@ https://computingforgeeks.com/virsh-commands-cheatsheet/
 
 virsh dominfo <name of domain>
 * Config of the VM
+
+
+.Expand a .qcow2 image, plus the internal partitions and filesystems:
+* Likely won't work with snapshots of the image
+* Seems like you need to do the whole procedure once for each partition that needs to be expanded
+* With the VM booted, use df -h to determine which partition number need to be expanded
+** Note that they may be /dev/vda* but the libvirt commands will refer to them as /dev/sda. 
+   The most important thing is the partition number.
+* Power off VM
+
+`IMAGE=<image.qcow2>`
+`PARTITION_NUMBER=<#>`
+`virt-filesystems --long -h --all -a $IMAGE`
+
+* Make a copy of the image before starting. I've munged up several images trying this and wish I had made a copy first.
+`cp $IMAGE /var/tmp/`
+
+* Check the image:
+`qemu-img check -r all $IMAGE`
+
+* Expand the image. The variable below is a single number, i.e. 2 plus letter 
+  designator for megabytes, gigabytes, terabyes etc.:
+`export CAPACITY_TO_ADD=<#><M,G,T>`
+
+`cp $IMAGE $IMAGE-orig`
+** Expand the partition and filesystem:
+`virt-resize --expand /dev/sda$PARTITION_NUMBER $IMAGE-orig $IMAGE`
+
+* Boot the image and verify the image, partition, and filesystem have been expanded
+** If everything works, you can delete the $IMAGE-orig and the copy in /var/tmp/
+`rm $IMAGE-orig /var/tmp/$IMAGE`
+
+
