@@ -1,0 +1,8 @@
+.To find and activate a repo for a specific package
+
+* On a system that has the same release and SP version and has the package/command:
+** To find the package that contains a command: `cnf <command>`
+** `zypper search-packages <package>`
+*** This gives the "SUSEConnect Activation Command" to activate the repo
+
+* Run the "SUSEConnect Activation Command" as root on the target system
