@@ -1,0 +1,15 @@
+SLES15SP1 kernel-default-base doesn't have 8021q module
+`zypper in kernel-default`
+* Will have to remove kernel-default-base and install kernel-default, then need to reboot
+
+* Verify the VLAN kernel module is present
+`uname -a`
+` ls /var/modules/<kernel version>/kernel/net/8021q`
+
+* May need to load module:
+`grep 8021q /proc/modules`
+`modprobe 8021q`
+
+* Set up VLAN:
+`ip link add link eth0 name eth0.240 type vlan id 240`
+`ip addr add 172.16.240.254 dev eth0.240`
