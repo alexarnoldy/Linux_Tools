@@ -6,3 +6,12 @@
 *** This gives the "SUSEConnect Activation Command" to activate the repo
 
 * Run the "SUSEConnect Activation Command" as root on the target system
+
+.To View installed package, including revision:
+* `zypper se --details --installed <package>
+* To query all packages installed: `rpm -qa`
+* To query all files contained in a package: `rpm -ql`
+
+* To find packages based on what product they are in, use: https://scc.suse.com/packages
+** Good for finding which repository is needed to be enabled to get the package
+** Can also find patches under "My Tools" on the left side of the same website
