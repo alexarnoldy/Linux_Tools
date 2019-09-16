@@ -7,8 +7,9 @@
 
 * Run the "SUSEConnect Activation Command" as root on the target system
 
-.To View installed package, including revision:
-* `zypper se --details --installed <package>
+.To View an installed package, including revision:
+* `zypper se --details --installed <package>`
+** Can use `zypper se --details <package>` to see in same thing but for packages that are not yet installed
 * To query all packages installed: `rpm -qa`
 * To query all files contained in a package: `rpm -ql`
 
