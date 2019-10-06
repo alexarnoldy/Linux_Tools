@@ -1,0 +1,21 @@
+* Show all of the XPATH elements in the file:
+** `xml el -v <filename>`
+
+* Delete a specific subnode based on its value:
+** `xml ed -d "//_:services-manager/_:services/_:enable/_:service[text()='spice-vdagentd']"  autoinst.xml`
+*** Deletes /profile/services-manager/services/enable/service where it contains the value spice-vdagentd
+**** Note: the root node "profile" must be noted in every subnode as "_:" because of the default namespace declaration "xmlns=" at the top of the file. 
+**** More info: https://stackoverflow.com/questions/9025492/xmlstarlet-does-not-select-anything/9030791#9030791?newreg=1eff7a8e8a2f47038796fec63e5cc433
+
+
+* Update the value of a subnode: 
+** To select the hostname: xml sel -t -m "//_:networking/_:dns" -v _:hostname FILENAME.xml
+*** Notice that -v specifies that we want the value of of the subnode _:hostname
+** To update the hostname: xml ed -L -u "//_:networking/_:dns/_:hostname" -v <new hostname> FILENAME.xml
+*** Notice in the case of updating, -v specifies that we want to update the value contained in the subnode _:hostname and the arguement of -v is the value to change it to
+
+* When the default namespace (the first one declared with "<" at the top of the file) contains "xmlns=", each subnode must start with "_:" to declare that default namespace. 
+* If the default namespace does not contain "xmlns=", can declare the XPATH starting with "/" and separated by "/"
+
+
+
