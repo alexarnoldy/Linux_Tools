@@ -53,4 +53,24 @@ The variable below is a number, i.e. 2, plus a letter
 ** If everything works, you can delete the $IMAGE-orig and the copy in /var/tmp/
 `rm $IMAGE-orig /var/tmp/$IMAGE`
 
+.virt-manager connecting to a different host repeatedly asks for ssh, or openSSH password:
+* Caused by spice setting up a unique ssh connection for each I/O channel (i.e. video, mouse, USB, sound, etc.)
+** Even if they're not usable for other reasons, i.e. sound
+* You can just keep entering the password as it will end once all of the connections are established. 
+** It may ask a couple more times for CDROM, etc. if they are added after the connection is first established.
+     
+* One way to allow it to happen without driving you crazy is to:
+** Check to see if ssh-agent is running: `ps -ef | grep -i ssh-agent`
+*** Start it if it's not running: `eval $(ssh-agent)`
+** See if you have keys loaded: `ssh-add -l`
+** Add keys if it says "The agent has no identities: `ssh-add`
+*** This won't work if there aren't ssh keys passed through from another host
+** Check again if keys have been passed to ssh-agent: `ssh-add -l`
+*** If not, manually add a key: `ssh-add <FQPN of private key>`
+**** I.e. `ssh-add /home/admin.ssh/id_rsa`
+** Enable key-exchange ssh with the host you're trying to connect virt-manager to: `ssh-copy-id user@host`
+** This should allow all ssh connections to be established automatically
+
+
+
 
