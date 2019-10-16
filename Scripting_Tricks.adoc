@@ -1,6 +1,6 @@
 .eval command:
 * Can be used to create a variable that contains a command set and then execute the command set later, i.e. 
-*  as the result of conditional test.
+as the result of conditional test.
 ----
 /home/user1 > a="ls | more"
 /home/user1 > $a
@@ -16,15 +16,22 @@ tmp
 /home/user1 >
 ----
 
-* Also seems to modify the output of a command:
+* Also seems to execute the output of a command:
 ----
 sles@admin:~/caaspv4-cluster> ssh-agent
 SSH_AUTH_SOCK=/tmp/ssh-X5GHuyKyv9WL/agent.21418; export SSH_AUTH_SOCK;
 SSH_AGENT_PID=21419; export SSH_AGENT_PID;
 echo Agent pid 21419;
 ----
+** The output of ssh-agent shows the variables that need to be set
 
 ----
 sles@admin:~/caaspv4-cluster> eval "$(ssh-agent)"
 Agent pid 21425
 ----
+** eval runs those commands, including the final echo
+
+
+.Using sed to search for one string on a line, then modify a different part of the line:
+* The command below searches for lines beginning with a space, then adds a # at the beginning of the line
+`sed -e '/^\ / s/^#*/#/' <file>`
