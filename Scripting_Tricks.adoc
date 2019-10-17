@@ -35,3 +35,10 @@ Agent pid 21425
 .Using sed to search for one string on a line, then modify a different part of the line:
 * The command below searches for lines beginning with a space, then adds a # at the beginning of the line
 `sed -e '/^\ / s/^#*/#/' <file>`
+* Comment lines two through four, no matter what those lines contain (in-place edit): `sed -i '2,4 s/^/#/' <file>`
+* Search for the line that begins with 127 and then remove localhost (outputs updated file contents to stdout, does not update file): `sed -e '/^127/ s/localhost//' /etc/hosts`
+* Search for the line that begins with 127, remove localhost, then insert a new line under it with the string that follows the "/a" (use "/i" for insert above the line returned by the search string) (outputs updated file contents to stdout, does not update file): 
+** `sed -e '/^127/ s/localhost//' -e '/^127/a 172.16.200.132    ses-osd-c.stable.suse.lab    ses-osd-c    localhost' /etc/hosts`
+*** Note that the single quotes will prevent variable expansion
+
+
