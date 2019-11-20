@@ -1,4 +1,4 @@
-.eval command:
+#### eval command:
 * Can be used to create a variable that contains a command set and then execute the command set later, i.e. 
 as the result of conditional test.
 ----
@@ -16,14 +16,14 @@ tmp
 /home/user1 >
 ----
 
-* Also seems to execute the output of a command:
+* Also used to execute the output of a command:
 ----
 sles@admin:~/caaspv4-cluster> ssh-agent
 SSH_AUTH_SOCK=/tmp/ssh-X5GHuyKyv9WL/agent.21418; export SSH_AUTH_SOCK;
 SSH_AGENT_PID=21419; export SSH_AGENT_PID;
 echo Agent pid 21419;
 ----
-** The output of ssh-agent shows the variables that need to be set
+** The output of ssh-agent displays (but doesn't execute) the variables that need to be set and the echo command
 
 ----
 sles@admin:~/caaspv4-cluster> eval "$(ssh-agent)"
@@ -32,9 +32,14 @@ Agent pid 21425
 ** eval runs those commands, including the final echo
 
 
+#### sed 
+
 .Using sed to search for one string on a line, then modify a different part of the line:
 * The command below searches for lines beginning with a space, then adds a # at the beginning of the line
 `sed -e '/^\ / s/^#*/#/' <file>`
+* The command bellow searches for lines containing the word driver, the substitutes the word overlay with the word vfs in any of those lines
+`sed -i '/driver/ s/overlay/vfs/' <file>`
+** This avoids replacing other places where the word overlay occurs, i.e. overlayfs 
 * Comment lines two through four, no matter what those lines contain (in-place edit): `sed -i '2,4 s/^/#/' <file>`
 * Search for the line that begins with 127 and then remove localhost (outputs updated file contents to stdout, does not update file): `sed -e '/^127/ s/localhost//' /etc/hosts`
 * Search for the line that begins with 127, remove localhost, then insert a new line under it with the string that follows the "/a" (use "/i" for insert above the line returned by the search string) (outputs updated file contents to stdout, does not update file): 
