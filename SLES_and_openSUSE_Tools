@@ -1,0 +1,34 @@
+.To find and activate a repo for a specific package
+
+* On a system that has the same release and SP version and has the package/command:
+** To find the package that contains a command: `cnf <command>`
+** `zypper search-packages <package>`
+*** This gives the "SUSEConnect Activation Command" to activate the repo
+
+* Run the "SUSEConnect Activation Command" as root on the target system
+
+.To View an installed package, including revision:
+* `zypper se --details --installed <package>`
+** Can use `zypper se --details <package>` to see in same thing but for packages that are not yet installed
+* To query all packages installed: `rpm -qa`
+* To query all files contained in a package: `rpm -ql`
+
+* To find packages based on what product they are in, use: https://scc.suse.com/packages
+** Good for finding which repository is needed to be enabled to get the package
+** Can also find patches under "My Tools" on the left side of the same website
+
+
+## RMT Server
+* `sudo yast rmt` to configure the base server. Doesn't do anything with repos.
+* `sudo rmt-cli sync` to sync (not mirror) repos from SCC
+
+.Adding product repos:
+* `sudo rmt-cli product list --all`
+** `sudo rmt-cli product list --all | grep -i <product>`
+*** The furthest left column is the product ID
+* `sudo rmt-cli product enable <product ID>`
+* `sudo rmt-cli sync`
+* `sudo rmt-cli mirror`
+
+*** Seems like you can do the same to enable individual repos by just replacing "product" with "repo" in the commands above.
+

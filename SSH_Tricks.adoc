@@ -1,0 +1,6 @@
+
+.scp
+* Can specify a source and destination that are not the current host
+** I.e. scp between two servers from your workstation
+** Use option `-3` to make the scp go through the current host. Useful when the two hosts can't communicate directly.
+// vim: set syntax=asciidoc:
