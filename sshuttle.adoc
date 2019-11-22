@@ -1,12 +1,12 @@
-Didn't work in Leap15 laptop with zypper install  
+.Didn't work in Leap15 laptop with zypper install  
 * `sudo pip install shuttle` worked  
 
-Can be very cool when trying to access a webpage but need features not available on a system close to the webserver
+.Can be very cool when trying to access a webpage but need features not available on a system close to the webserver
 * I.e. The IPMI for a system in a private network, but need Java, which isn't available on a system in the same private network
 ** Also, where a desktop isn't available in the private network and VNC, etc. isn't working
 *** In this case just need a server in the private network that route out and has an SSH server running
 
-* `sshuttle -r infra4 -x infra4 0/0 -vv`  
+.`sshuttle -r infra4 -x infra4 0/0 -vv`  
 * Leverages .ssh/config
 * For -r, grabs USER and HOSTNAME, for -x only grabs HOSTNAME  
 * -x is to exlude a server or subnet (w.x.y.z/24)
