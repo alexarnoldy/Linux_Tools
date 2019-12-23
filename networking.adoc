@@ -1,0 +1,22 @@
+* (On platform) To see the ports being monitored: `ss -npr --listening`
+
+.nmap (probing from external system)
+* Check if a server is running DNS: `sudo nmap -sT -sU -p 53 <server IP>`
+* Check if a server is running DHCP: `sudo nmap -sU -p 67 --script=dhcp-discover <server IP>`
+** Check for DHCP servers on a subnet: `sudo nmap -sU -p 67 --script=dhcp-discover <network>/<CIDR mask> | less`
+** Note that a result of "67/udp open|filtered dhcps" means the port is monitored but the DHCP server is not responding to requests
+** Example of a valid DHCP server response:
+----
+67/udp open  dhcps
+| dhcp-discover:
+|   DHCP Message Type: DHCPACK
+|   Server Identifier: 192.168.1.10
+|   Broadcast Address: 192.168.1.255
+|   Domain Name: example.com
+|   Domain Name Server: 192.168.1.10
+|   Router: 192.168.1.1
+|_  Subnet Mask: 255.255.255.0
+MAC Address: 52:54:00:93:EB:A1
+----
+
+* Can also use `telnet <server IP> <port>` to test for an open TCP port
