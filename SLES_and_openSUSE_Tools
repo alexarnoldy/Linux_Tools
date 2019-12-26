@@ -32,3 +32,4 @@
 
 *** Seems like you can do the same to enable individual repos by just replacing "product" with "repo" in the commands above.
 
+// vim: set syntax=asciidoc:
