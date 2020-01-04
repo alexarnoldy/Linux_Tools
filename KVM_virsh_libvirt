@@ -71,6 +71,10 @@ The variable below is a number, i.e. 2, plus a letter
 ** Enable key-exchange ssh with the host you're trying to connect virt-manager to: `ssh-copy-id user@host`
 ** This should allow all ssh connections to be established automatically
 
+
+### Clone a VM:
+* `virt-clone -o <original VM> -n <new VM> -f <FQPN for new drive file>
+
 ### Snapshot VM:
 * Command to convert the raw disk format to qcow2: `qemu-img convert -f raw -O qcow2 image-name.img image-name.qcow2`
 
