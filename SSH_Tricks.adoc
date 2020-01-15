@@ -3,4 +3,16 @@
 * Can specify a source and destination that are not the current host
 ** I.e. scp between two servers from your workstation
 ** Use option `-3` to make the scp go through the current host. Useful when the two hosts can't communicate directly.
+
+.Ignore entries in known_hosts for specific hosts
+* Breaks a big part of SSH security
+* Useful for testing (i.e. Terraform) where hostnames are reused but new instances are generated regularly
+* In the .ssh/config file:
+----
+Host <your problematic host>
+  StrictHostKeyChecking no
+
+
 // vim: set syntax=asciidoc:
+
+
