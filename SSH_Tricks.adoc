@@ -8,6 +8,9 @@
 ----
 sudo bash -c "ssh-keyscan -f .all_nodes > /etc/ssh/ssh_known_hosts"
 ----
+* Note that it can still break if the user's known_hosts file has conflicts
+** Use `ssh-keygen -R <hostname as it appears in the known_hosts file>` to remove conflicts
+*** May have to repeat to remove IP address entries
 
 .Ignore entries in ~/.ssh/known_hosts for a specific host
 * Breaks a big part of SSH security
