@@ -4,6 +4,11 @@
 ** I.e. scp between two servers from your workstation
 ** Use option `-3` to make the scp go through the current host. Useful when the two hosts can't communicate directly.
 
+.Create a file of regenerated hostnames (.all_nodes) and use ssh-keyscan to populate the /etc/ssh/ssh_known_hosts file:
+----
+sudo bash -c "ssh-keyscan -f .all_nodes > /etc/ssh/ssh_known_hosts"
+----
+
 .Ignore entries in ~/.ssh/known_hosts for a specific host
 * Breaks a big part of SSH security
 * Useful for testing (i.e. Terraform) where hostnames are reused but new instances are generated regularly
@@ -11,6 +16,12 @@
 ----
 Host <your problematic host>
   StrictHostKeyChecking no
+----
+* Can add these to avoid the error that still pops up:
+----
+  GlobalKnownHostsFile=/dev/null
+  UserKnownHostsFile=/dev/null 
+----
 
 
 // vim: set syntax=asciidoc:
