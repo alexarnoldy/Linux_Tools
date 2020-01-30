@@ -79,6 +79,8 @@ The variable below is a number, i.e. 2, plus a letter
 * Command to convert the raw disk format to qcow2: `qemu-img convert -f raw -O qcow2 image-name.img image-name.qcow2`
 
 * Take snapshot: `sudo virsh snapshot-create-as {vm_name} --name {snapshot_name} --description  “optional description”`
+** Add `--live` to snapshot a running VM
+* Revert snapshot: `sudo virsh snapshot-revert {vm_name} {snapshot_name}`
 * Delete most recent (or only) snapshot: `sudo virsh snapshot-delete --domain mstr2.suse.hpc.local  --current`
 
 
