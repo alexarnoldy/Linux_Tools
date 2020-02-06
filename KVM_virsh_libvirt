@@ -1,3 +1,10 @@
+. Working with hardened, minimized, and JeOS images:
+* A lot of functions require the `kernel-default` package `kernel-default-base` won't provide all of the needed pieces
+** The resultant errors are nearly useless
+** Examples are 802.11q VLANS and NFS server
+** For automated deployments can try to add something like: `zypper in --force-resolution --no-confirm --force kernel-default`
+** Basically if something pretty simple doesn't work, look for the `kernel-default` package.
+
 sudo virsh net-dhcp-leases default
 * See DHCP addresses leased on the network named default
 
