@@ -1,4 +1,4 @@
-SLES15SP1 kernel-default-base doesn't have 8021q module
+SLES15SP1 kernel-default-base doesn't have 8021q module (found same problem with NFS server)
 `zypper in kernel-default`
 * Will have to remove kernel-default-base and install kernel-default, then need to reboot
 
