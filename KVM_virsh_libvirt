@@ -1,9 +1,27 @@
-. Working with hardened, minimized, and JeOS images:
+.Working with hardened, minimized, and JeOS images:
 * A lot of functions require the `kernel-default` package `kernel-default-base` won't provide all of the needed pieces
 ** The resultant errors are nearly useless
 ** Examples are 802.11q VLANS and NFS server
 ** For automated deployments can try to add something like: `zypper in --force-resolution --no-confirm --force kernel-default`
 ** Basically if something pretty simple doesn't work, look for the `kernel-default` package.
+
+.Mounting a qcow2 image (r/w):
+https://gist.github.com/shamil/62935d9b456a6f9877b5
+----
+Step 1 - Enable NBD on the Host: modprobe nbd max_part=8
+
+Step 2 - Connect the QCOW2 as network block device: qemu-nbd --connect=/dev/nbd0 /var/lib/vz/images/100/vm-100-disk-1.qcow2
+
+Step 3 - Find The Virtual Machine Partitions: fdisk /dev/nbd0 -l
+
+Step 4 - Mount the partition from the VM: mount /dev/nbd0p1 /mnt/somepoint/
+
+Step 5 - After you done, unmount and disconnect:
+umount /mnt/somepoint/
+qemu-nbd --disconnect /dev/nbd0
+rmmod nbd
+----
+
 
 sudo virsh net-dhcp-leases default
 * See DHCP addresses leased on the network named default
