@@ -1,4 +1,4 @@
-. Working with hardened, minimized, and JeOS images:
+.Working with hardened, minimized, and JeOS images:
 * A lot of functions require the `kernel-default` package `kernel-default-base` won't provide all of the needed pieces
 ** The resultant errors are nearly useless
 ** Examples are 802.11q VLANS and NFS server
@@ -24,6 +24,8 @@
 ** Good for finding which repository is needed to be enabled to get the package
 ** Can also find patches under "My Tools" on the left side of the same website
 
+## VM images can sometimes lose eth0 and or other interfaces after updating
+* Remove /etc/udev/rules.d/70-persistent-net.rules and reboot
 
 ## RMT Server
 * `sudo yast rmt` to configure the base server. Doesn't do anything with repos.
