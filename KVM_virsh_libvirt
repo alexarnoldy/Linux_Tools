@@ -5,6 +5,9 @@
 ** For automated deployments can try to add something like: `zypper in --force-resolution --no-confirm --force kernel-default`
 ** Basically if something pretty simple doesn't work, look for the `kernel-default` package.
 
+## VM images can sometimes lose eth0 and or other interfaces after updating
+* Remove /etc/udev/rules.d/70-persistent-net.rules and reboot
+
 .Mounting a qcow2 image (r/w):
 https://gist.github.com/shamil/62935d9b456a6f9877b5
 ----
