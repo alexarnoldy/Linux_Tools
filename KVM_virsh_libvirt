@@ -8,18 +8,22 @@
 .Mounting a qcow2 image (r/w):
 https://gist.github.com/shamil/62935d9b456a6f9877b5
 ----
-Step 1 - Enable NBD on the Host: modprobe nbd max_part=8
+Step 1 - Enable NBD on the Host: sudo modprobe nbd max_part=8
 
-Step 2 - Connect the QCOW2 as network block device: qemu-nbd --connect=/dev/nbd0 /var/lib/vz/images/100/vm-100-disk-1.qcow2
+export PATH_TO_QCOW2=""
 
-Step 3 - Find The Virtual Machine Partitions: fdisk /dev/nbd0 -l
+Step 2 - Connect the QCOW2 as network block device: sudo qemu-nbd --connect=/dev/nbd0 ${PATH_TO_QCOW2}
 
-Step 4 - Mount the partition from the VM: mount /dev/nbd0p1 /mnt/somepoint/
+Step 3 - Find The Virtual Machine Partitions: sudo fdisk /dev/nbd0 -l
+
+export PARTITION_TO_MOUNT=""
+export MOUNTPOINT=""
+Step 4 - Mount the partition from the VM: sudo mount /dev/nbd0p${PARTITION_TO_MOUNT} ${MOUNTPOINT}
 
 Step 5 - After you done, unmount and disconnect:
-umount /mnt/somepoint/
-qemu-nbd --disconnect /dev/nbd0
-rmmod nbd
+sudo umount ${MOUNTPOINT}
+sudo qemu-nbd --disconnect /dev/nbd0
+sudo rmmod nbd
 ----
 
 
