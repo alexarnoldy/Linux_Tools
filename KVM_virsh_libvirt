@@ -8,7 +8,8 @@
 ## VM images can sometimes lose eth0 and or other interfaces after updating
 * Remove /etc/udev/rules.d/70-persistent-net.rules and reboot
 
-## Mounting a qcow2 image, where the image file exists in the filesystem:
+
+## Mounting a qcow2 image file saved to the local filesystem:
 
 NOTE: An alternative to mounting a qcow2 image on a VM is to provide it as an additional HDD to the VM, then mount it normally.
 
@@ -34,9 +35,87 @@ sudo qemu-nbd --disconnect /dev/nbd0
 sudo rmmod nbd
 ----
 
-## Mounting and updating a qcow2 image:
+## Mounting and updating a SLES installed qcow2 image:
 
-TIP: Mounting a qcow2 image onto a VM that is booted from copy of a the same image seems to fail miserably. There is likely some signture or bootblock (at least with XFS) that can't have mounted duplicates)
+NOTE: This procedure can be useful in cases where booting and updating an image is undesirable (i.e. when cloud init is installed and first boot hasn't occurred).
+
+IMPORTANT: This procedure requires a VM or host that is running the same version and service pack release of SLES (i.e. SLES 15 SP1) as is installed on the qcow2 image. In addition, the VM or host must have access to the repositories, either via an RMT server or SCC, that will be needed to install and/or update the software on the qcow2 image. Additional registration codes may need to be applied to the VM or host, and additional repositories may need to be added to the VM or host.
+
+NOTE: Mounting a qcow2 image onto a VM that is booted from copy of a the same image seems to fail miserably. There is likely some signture or bootblock (at least with XFS) that can't have mounted duplicates
+
+* Make a copy of the image, changing the name in a way that you will easily recognize the copy to update 
+
+TIP: If the image file is small (i.e. a JeOS image) or the root filesystem on the image is already full, consider following the "Expand a .qcow2 image, plus the internal partitions and filesystems" procedure, further down in this document, to expand the copy image file.
+
+* Attach the copy to a VM running the same version and service pack release of SLES
+* Use `df -h` and `sudo lsblk` on the VM to find the block device (i.e. /dev/vdb) for the qcow image
+** `sudo lsblk` and `sudo fdisk -l` can help determine which partitions from the image need to be mounted (often just the root partition)
+* Mount the the partition(s) on the VM
+
+TIP: If it's not possible to attach the qcow2 image copy as an additional HDD to a VM (i.e. if using a bare-metal host), use the "Mounting a qcow2 image file saved to the local filesystem" procedure to mount it.
+
+* On the VM or host perform the following steps to register the qcow2 image copy and install/update its software:
+** Register the image copy:
+*** `export MOUNTPOINT=""` 
+*** For each `SUSEConnect` command, add `--root ${MOUNTPOINT}`
+*** I.e. To view the registered extentions on the image copy: `sudo SUSEConnect --root ${MOUNTPOINT} --list-extensions | grep -A2 Activated`
+** To view currently installed packages: `sudo zypper --root ${MOUNTPOINT} -i search | grep ^i`
+*** Add a search pattern after `search` to search for specific packages
+** To install a package: `sudo zypper --root ${MOUNTPOINT} install <package name>`
+** To install a pattern of packages: `sudo zypper --root ${MOUNTPOINT} install -t pattern <pattern name>`
+** To update all software on the copy: `sudo zypper --root ${MOUNTPOINT} update`
+
+* After finishing working with the software on the copy, umount it and, if needed, remove it from the VM
+** If the copy was mounted from a file on the local filesystem, follow the "Mounting a qcow2 image file saved to the local filesystem" procedure to finish unmounting
+
+
+
+
+## Expand a .qcow2 image, plus the internal partitions and filesystems:
+* Likely won't work if the image has snapshots
+* Seems like you need to do the whole procedure once for each partition that needs to be expanded
+
+* If the image isn't running on a VM, use the following command on a KVM host to determine which paritions/filesystems need to be expanded:
+** `IMAGE=<image.qcow2>`
+** `virt-filesystems --long -h --all -a $IMAGE`
+* If the image is running on a VM, use df -h to determine which partition number need to be expanded
+** Note that they may be /dev/vda* but the libvirt commands will refer to them as /dev/sda. 
+   The most important thing is the partition number.
+** Power off VM
+
+* If not already set, set these variables:
+** `export IMAGE="<image.qcow2">`
+** `export PARTITION_NUMBER=<#>`
+
+CAUTION: I highly recommend making a copy of the image before starting. I've munged up several images trying this and wish I had made a copy first.
+
+* Check the image: `sudo qemu-img check -r all $IMAGE`
+
+The variable below is a number, i.e. 2, plus a letter 
+  designator for megabytes, gigabytes, terabyes, i.e. G. 
+** I.e. `export CAPACITY_TO_ADD=2G` would be used to add two gigabytes to the image:
+`export CAPACITY_TO_ADD=<#><M,G,T>`
+`sudo qemu-img resize $IMAGE +$CAPACITY_TO_ADD`
+
+* Verify the logical image size has grown, though the partitions have not:
+`sudo virt-filesystems --long -h --all -a $IMAGE`
+
+TIP: Make sure you have enough space in a local filesystem to create an additional copy of the image. The image and the copy don't need to be inthe same filesystem.
+
+* Create a copy of the image as the source to migrate data from. This IS NOT the copy your created earlier for safe keeping:
+** `cp ${IMAGE} ${IMAGE}-orig`
+* Expand the partition and filesystem, and migrate the data:
+`sudo virt-resize --expand /dev/sda${PARTITION_NUMBER} ${IMAGE}-orig ${IMAGE}`
+
+IMPORTANT: Ensure the `virt-resize` command completes with the message "Resize operation completed with no errors."
+
+* Verify the correct partition and filesystem have grown to taken up the extra capacity
+`sudo virt-filesystems --long -h --all -a $IMAGE`
+
+* Repeat the process with any additional partitions that need to be expanded
+
+* Boot the image, or attach it to a suitable VM, and verify the condition of the image, partitions, and filesystems
+** If everything works, you can delete the $IMAGE-orig and the extra copy created at the beginning of the procedure
 
 
 
@@ -55,63 +134,24 @@ sudo virsh domifaddr <name of domain>
 * IP and MAC of VM
 
 
-.Expand a .qcow2 image, plus the internal partitions and filesystems:
-* Likely won't work if the image has snapshots
-* Seems like you need to do the whole procedure once for each partition that needs to be expanded
 
-* With the VM booted, use df -h to determine which partition number need to be expanded
-** Note that they may be /dev/vda* but the libvirt commands will refer to them as /dev/sda. 
-   The most important thing is the partition number.
-* Power off VM
+### Fix for virt-manager connecting to a different host and repeatedly asking for ssh, or openSSH password:
+* Made soooo much worse by Spice setting up a unique ssh connection for each I/O channel (i.e. video, mouse, USB, sound, etc.)
+** Spice does this even if the function not usable for other reasons, i.e. sound
 
-`IMAGE=<image.qcow2>`
-`PARTITION_NUMBER=<#>`
-`virt-filesystems --long -h --all -a $IMAGE`
-
-* Make a copy of the image before starting. I've munged up several images trying this and wish I had made a copy first.
-`cp $IMAGE /var/tmp/`
-
-* Check the image:
-`qemu-img check -r all $IMAGE`
-
-The variable below is a number, i.e. 2, plus a letter 
-  designator for megabytes, gigabytes, terabyes, i.e. G. 
-**  `export CAPACITY_TO_ADD=2G` would be used to add two gigabytes to the image:
-`export CAPACITY_TO_ADD=<#><M,G,T>`
-`qemu-img resize $IMAGE +$CAPACITY_TO_ADD`
-
-* Verify the logical image size has grown, though the partitions have not:
-`virt-filesystems --long -h --all -a $IMAGE`
-
-
-
-* Expand the partition and filesystem:
-`cp $IMAGE $IMAGE-orig`
-`virt-resize --expand /dev/sda$PARTITION_NUMBER $IMAGE-orig $IMAGE`
-
-* Verify the correct partition has taken up the desired capacity
-`virt-filesystems --long -h --all -a $IMAGE`
-
-* Boot the image and verify the image, partition, and filesystem have been expanded
-** If everything works, you can delete the $IMAGE-orig and the copy in /var/tmp/
-`rm $IMAGE-orig /var/tmp/$IMAGE`
-
-.virt-manager connecting to a different host repeatedly asks for ssh, or openSSH password:
-* Caused by spice setting up a unique ssh connection for each I/O channel (i.e. video, mouse, USB, sound, etc.)
-** Even if they're not usable for other reasons, i.e. sound
-* You can just keep entering the password as it will end once all of the connections are established. 
-** It may ask a couple more times for CDROM, etc. if they are added after the connection is first established.
+NOTE: One option is to just keep entering the password when prompted. Even though it feels like an endless loop, it will end once all of the connections are established. It may ask a couple more times for CDROM, etc. if they are added after the I/O channel connection is first established.
      
-* One way to allow it to happen without driving you crazy is to:
+* One way to resolve this without driving yourself crazy is:
 ** Check to see if ssh-agent is running: `ps -ef | grep -i ssh-agent`
 *** Start it if it's not running: `eval $(ssh-agent)`
 ** See if you have keys loaded: `ssh-add -l`
-** Add keys if it says "The agent has no identities: `ssh-add`
-*** This won't work if there aren't ssh keys passed through from another host
+** Add all available keys if it says "The agent has no identities: `ssh-add`
+*** This won't work if there aren't local ssh keys and none passed through from another host
 ** Check again if keys have been passed to ssh-agent: `ssh-add -l`
-*** If not, manually add a key: `ssh-add <FQPN of private key>`
+*** If it still shows "...no identities", manually add a key: `ssh-add <FQPN of private key>`
 **** I.e. `ssh-add /home/admin.ssh/id_rsa`
-** Enable key-exchange ssh with the host you're trying to connect virt-manager to: `ssh-copy-id user@host`
+*** NOTE: If no keys are currently avaiable, consider creating one with `ssh-keygen` and take note of where the key is saved
+** Enable ssh key-exchange with the host you're trying to connect virt-manager to: `ssh-copy-id user@host`
 ** This should allow all ssh connections to be established automatically
 
 
@@ -129,4 +169,4 @@ The variable below is a number, i.e. 2, plus a letter
 
 
 
-
+// vim: set syntax=asciidoc:
