@@ -17,6 +17,8 @@ export PATH_TO_QCOW2=""
 
 Step 2 - Connect the QCOW2 as network block device: sudo qemu-nbd --connect=/dev/nbd0 ${PATH_TO_QCOW2}
 
+NOTE: May need to install qemu-tools to get `qemu-nbd`
+
 Step 3 - Find The Virtual Machine Partitions: sudo fdisk /dev/nbd0 -l
 
 export PARTITION_TO_MOUNT=""
