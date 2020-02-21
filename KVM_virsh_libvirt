@@ -8,7 +8,10 @@
 ## VM images can sometimes lose eth0 and or other interfaces after updating
 * Remove /etc/udev/rules.d/70-persistent-net.rules and reboot
 
-.Mounting a qcow2 image (r/w):
+## Mounting a qcow2 image, where the image file exists in the filesystem:
+
+NOTE: An alternative to mounting a qcow2 image on a VM is to provide it as an additional HDD to the VM, then mount it normally.
+
 https://gist.github.com/shamil/62935d9b456a6f9877b5
 ----
 Step 1 - Enable NBD on the Host: sudo modprobe nbd max_part=8
@@ -31,7 +34,13 @@ sudo qemu-nbd --disconnect /dev/nbd0
 sudo rmmod nbd
 ----
 
+## Mounting and updating a qcow2 image:
 
+TIP: Mounting a qcow2 image onto a VM that is booted from copy of a the same image seems to fail miserably. There is likely some signture or bootblock (at least with XFS) that can't have mounted duplicates)
+
+
+
+## Miscellaneous commands:
 sudo virsh net-dhcp-leases default
 * See DHCP addresses leased on the network named default
 
