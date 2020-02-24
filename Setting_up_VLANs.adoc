@@ -13,3 +13,5 @@ SLES15SP1 kernel-default-base doesn't have 8021q module (found same problem with
 * Set up VLAN:
 `ip link add link eth0 name eth0.240 type vlan id 240`
 `ip addr add 172.16.240.254 dev eth0.240`
+
+// vim: set syntax=asciidoc:
