@@ -51,6 +51,7 @@
 ** `*` means that there is no password assigned and thus the user cannot login with password based authentication
 ** `!` or a password that starts with `!` means the account is locked and the user cannot login
 * Can use the `passwd` command to create a password for root or any other account
-* Can use the `useradd` command to create new users
+* Only BASH functions are available so can't do much more that change passwords and edit files
+* Have to externally reset the system
 
 // vim: set syntax=asciidoc:
