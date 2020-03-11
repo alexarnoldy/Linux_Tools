@@ -1,11 +1,11 @@
-.Working with hardened, minimized, and JeOS images:
+==== Working with hardened, minimized, and JeOS images:
 * A lot of functions require the `kernel-default` package `kernel-default-base` won't provide all of the needed pieces
 ** The resultant errors are nearly useless
 ** Examples are 802.11q VLANS and NFS server
 ** For automated deployments can try to add something like: `zypper in --force-resolution --no-confirm --force kernel-default`
 ** Basically if something pretty simple doesn't work, look for the `kernel-default` package.
 
-.To find and activate a repo for a specific package
+==== To find and activate a repo for a specific package
 
 * On a system that has the same release and SP version and has the package/command:
 ** To find the package that contains a command: `cnf <command>`
@@ -24,10 +24,10 @@
 ** Good for finding which repository is needed to be enabled to get the package
 ** Can also find patches under "My Tools" on the left side of the same website
 
-## VM images can sometimes lose eth0 and or other interfaces after updating
+==== VM images can sometimes lose eth0 and or other interfaces after updating
 * Remove /etc/udev/rules.d/70-persistent-net.rules and reboot
 
-## RMT Server
+==== RMT Server
 * `sudo yast rmt` to configure the base server. Doesn't do anything with repos.
 * `sudo rmt-cli sync` to sync (not mirror) repos from SCC
 
@@ -40,5 +40,17 @@
 * `sudo rmt-cli mirror`
 
 *** Seems like you can do the same to enable individual repos by just replacing "product" with "repo" in the commands above.
+
+==== Reset root password:
+* Stop boot at GRuB screen with arrow keys
+* Highlight the default boot line and press `e`
+* Scroll down to the line that starts with `linux     /boot/vmlinuz` or `kernel     /boot/vmlinuz` and go the end of that line (the End key is helpful here)
+* Add a space, then `init=/bin/bash`
+* Press Ctrl+x or F10 to boot (on older systems it might be `b`)
+* At the root shell can review the /etc/shadow file to see what accounts exist on the system and if they have a password assigned
+** `*` means that there is no password assigned and thus the user cannot login with password based authentication
+** `!` or a password that starts with `!` means the account is locked and the user cannot login
+* Can use the `passwd` command to create a password for root or any other account
+* Can use the `useradd` command to create new users
 
 // vim: set syntax=asciidoc:
