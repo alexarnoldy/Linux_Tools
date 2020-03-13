@@ -1,4 +1,4 @@
-#### eval command:
+==== eval command:
 * Can be used to create a variable that contains a command set and then execute the command set later, i.e. 
 as the result of conditional test.
 ----
@@ -32,7 +32,7 @@ Agent pid 21425
 ** eval runs those commands, including the final echo
 
 
-#### sed 
+==== sed 
 
 .Using sed to search for one string on a line, then modify a different part of the line:
 * The command below searches for lines beginning with a space, then adds a # at the beginning of the line
@@ -50,3 +50,8 @@ Agent pid 21425
 
 `sed '/^anothervalue=.*/i before=me\nbefore2=me2' test.txt`
 
+==== awk
+
+.Instead of `grep | awk`, can use awk to do both:
+* Show the first field of every line that contains the expression "important=no": `snapper list | awk '/important=no/{print$1}'`
+* Show the entire line of every line that contains the expression "important=no": `snapper list | awk '/important=no/{print$0}'`
