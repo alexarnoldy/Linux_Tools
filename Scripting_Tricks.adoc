@@ -55,3 +55,4 @@ Agent pid 21425
 .Instead of `grep | awk`, can use awk to do both:
 * Show the first field of every line that contains the expression "important=no": `snapper list | awk '/important=no/{print$1}'`
 * Show the entire line of every line that contains the expression "important=no": `snapper list | awk '/important=no/{print$0}'`
+** Since print is the default action, the above is same as: `snapper list | awk '/important=no/'`
