@@ -21,4 +21,14 @@ MAC Address: 52:54:00:93:EB:A1
 
 * Can also use `telnet <server IP> <port>` to test for an open TCP port
 
+
+=== tcpdump
+
+* `sudo zypper -n install tcpdump`
+
+* `sudo tcpdump -i virbr0 -n src host 10.110.2.0`
+** Viewing NAT traffic on a bridge that originates (src) from a VM with IP 10.110.2.0
+** -n = don't resolve hostname, -nn = don't resolve hostname or port
+
+
 // vim: set syntax=asciidoc:
