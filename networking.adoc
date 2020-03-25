@@ -30,5 +30,22 @@ MAC Address: 52:54:00:93:EB:A1
 ** Viewing NAT traffic on a bridge that originates (src) from a VM with IP 10.110.2.0
 ** -n = don't resolve hostname, -nn = don't resolve hostname or port
 
+=== xip.io
+
+* Public DNS server that provides wildcard DNS resolution for the IP address that is embedded in the FQDN
+* I.e:
+----
+getent hosts 172.16.240.100.xip.io
+172.16.240.100  172.16.240.100.xip.io
+----
+----
+getent hosts test.172.16.240.100.xip.io
+172.16.240.100  test.172.16.240.100.xip.io
+----
+----
+getent hosts foo.bar.172.16.240.100.xip.io
+172.16.240.100  foo.bar.172.16.240.100.xip.io
+----
+
 
 // vim: set syntax=asciidoc:
