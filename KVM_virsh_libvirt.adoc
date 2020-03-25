@@ -140,8 +140,12 @@ sudo virsh domifaddr <name of domain>
 ** Spice does this even if the function not usable for other reasons, i.e. sound
 
 NOTE: One option is to just keep entering the password when prompted. Even though it feels like an endless loop, it will end once all of the connections are established. It may ask a couple more times for CDROM, etc. if they are added after the I/O channel connection is first established.
+
+IMPORTANT: Sometimes, after applying the fix below, Spice will still send a stream of ssh password prompts. This can be fixed on a per-VM basis by opening the VM's settings in virt-manager, selecting *Display Spice*, under *Spice Server* -> *Address* select *All interfaces*. I'd love to remove Display Spice but doing so seems cause other problems.
      
-* One way to resolve this without driving yourself crazy is:
+.One way to resolve this without driving yourself crazy is:
+
+* Open a terminal window from the desktop session
 ** Check to see if ssh-agent is running: `ps -ef | grep -i ssh-agent`
 *** Start it if it's not running: `eval $(ssh-agent)`
 ** See if you have keys loaded: `ssh-add -l`
@@ -152,6 +156,7 @@ NOTE: One option is to just keep entering the password when prompted. Even thoug
 **** I.e. `ssh-add /home/admin.ssh/id_rsa`
 *** NOTE: If no keys are currently avaiable, consider creating one with `ssh-keygen` and take note of where the key is saved
 ** Enable ssh key-exchange with the host you're trying to connect virt-manager to: `ssh-copy-id user@host`
+** Start virt-manager from the same terminal window: `virt-manager`
 ** This should allow all ssh connections to be established automatically
 
 
@@ -166,6 +171,25 @@ NOTE: One option is to just keep entering the password when prompted. Even thoug
 * Revert snapshot: `sudo virsh snapshot-revert {vm_name} {snapshot_name}`
 * Delete most recent (or only) snapshot: `sudo virsh snapshot-delete --domain mstr2.suse.hpc.local  --current`
 
+### Fix for error message `authentication unavailable: no polkit agent available to authenticate action 'org.libvirt.unix.manage'`
+
+* Avoid various other issues by making sure that the user connecting (especially from remotely) is the same user that is in the libvirt and kvm groups: 
+----
+export USERNAME=
+----
+----
+sudo usermod -a -G kvm ${USERNAME}
+sudo usermod -a -G libvirt ${USERNAME}
+----
+* As root (or sudo), create the `/etc/polkit-1/rules.d/49-org.libvirt.unix.manager.rules` file
+----
+polkit.addRule(function(action, subject) {
+    if (action.id == "org.libvirt.unix.manage" &&
+        subject.isInGroup("kvm")) {
+            return polkit.Result.YES;
+        }
+});
+----
 
 
 
