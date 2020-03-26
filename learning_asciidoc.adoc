@@ -1,0 +1,21 @@
+DocServ2 overview:
+
+Documentation Process:
+* Input from Bugzilla, Jira, and other sources
+* Currently using AsciiDoc and DocBook formats
+** DocBook is better for smaller projects
+** AsciiDoc is for CaaSP and SES and a few others
+** Output looks the same from both
+** Selected on a per-product basis
+
+* Build process (DAPS) outputs HTML, PDF, EPUB, and ASCII
+* Uses specific stylesheets
+** Completely automated through containers with specific toolchain
+** Pulls sources from github
+** Allows syncing the output to external, beta, and/or internal websites (put final push is manual to allow for review)
+** The toolchain consumes DocBook XML and Asciidoc can export to DocBook XML
+** If you run into problems with DAPS, open an issue on GH
+** https://opensuse.github.io/daps/
+
+
+
