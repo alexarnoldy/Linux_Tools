@@ -1,4 +1,9 @@
-* (On platform) To see the ports being monitored: `ss -npr --listening`
+==== Wait for something to happen before moving on:
+* Wait for ssh to be ready after rebooting a remote host: `until nc -zv $host 22; do sleep 5; done`
+* Wait for NFS server to be ready: `until sudo showmount -e; do echo "NFS server not ready" && sleep 5; done`
+
+
+* To see the ports being monitored on the host: `ss -npr --listening`
 
 .nmap (probing from external system)
 * Check if a server is running DNS: `sudo nmap -sT -sU -p 53 <server IP>`
