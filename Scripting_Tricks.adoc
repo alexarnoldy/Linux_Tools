@@ -1,3 +1,7 @@
+==== Wait for something to happen before moving on:
+* Wait for ssh to be ready after rebooting a remote host: `until nc -zv $host 22; do sleep 5; done`
+* Wait for NFS server to be ready: `until sudo showmount -e; do echo "NFS server not ready" && sleep 5; done`
+
 ==== eval command:
 * Can be used to create a variable that contains a command set and then execute the command set later, i.e. 
 as the result of conditional test.
