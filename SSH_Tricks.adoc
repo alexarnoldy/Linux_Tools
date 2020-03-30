@@ -20,11 +20,14 @@ sudo bash -c "ssh-keyscan -f .all_nodes > /etc/ssh/ssh_known_hosts"
 Host <your problematic host>
   StrictHostKeyChecking no
 ----
-* Can add these to avoid the error that still pops up:
+* Can add these as well to supress the error that still pops up:
 ----
   GlobalKnownHostsFile=/dev/null
   UserKnownHostsFile=/dev/null 
 ----
+
+* Equivilent on the commandline: `ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null ${user}@${host}`
+
 
 
 // vim: set syntax=asciidoc:
