@@ -1,6 +1,8 @@
 ==== Instructor Sander van Vugt 
 
 * GH: https://github.com/sandervanvugt/cool-bash
+** Note that the scripts might not work correctly, but have lots of hints
+** Has other interesting repos, such as: https://github.com/sandervanvugt/bash-scripting
 
 * mail@sandervanvugt.nl
 
@@ -22,17 +24,41 @@
 
 * Can use `bash -x` (debug mode) to see what bash is executing
 
+* Need to research `source` in a bash script. Something to do with preventing sub-shells from being spawned
+** `exec` causes the subsequent command to run in the current shell
+
+* `$#` represents the number of arguments given when executing the script
+
+* This is known as a "here document"
+----
+cat << EOF >> /tmp/file
+...
+EOF
+----
+
+* Better than `ps aux | grep ssh | grep -v grep` can just put [] around the first letter in the expression, i.e. `ps aux | grep [s]sh`. This makes grep match all processes that start with that first letter (the exact same pattern matching bahavior as without []'s), but since the grep process has [ as the first character, i.e. `[s]sh` it won't match.
+
+* If statements are documented in the bash man page, tests are documented in the test man page
 ==== Notes on scripts in GH
 
 * 1_cpu-hog does sorting and comparing two values gathered over time
 
 * 2_cv: Using bash tests. Check manpage for test
 ----
-([ ! -e $1 ] && exit 52) || ([ -f $1 ] && vi $1) ||  cd $1 
+([ -z $1 ] && exit 52) || ([ -f $1 ] && vi $1) ||  cd $1 
 ----
+** IMPORTANT: This doesn't work, because the ()'s cause the tests to run in sub-shells. Works when putting each test on different lines and removing the ()'s and ||'s
 ** If the first argument to the command does not exist *then* exit with a status of 1, *else* if the argument is a file *then* vi the file, *else* cd to the directory
 ** Need to research the difference between -z and -e
 ** Take note that ()'s contain the different tests and what should be done if the test is true. That allows the ||'s to execute the next test
 ** Can use any exit code and then be able to analyze or react to what caused the exit
 
+* 4_reboot-test.sh runs some processes, creates an after-reboot script, reboots, then executes the script from within /etc/profile when the user logs in
 
+* 3_choosedir uses `select` with if/then/else to give the user a menu of options (very cool!)
+** Uses `if [ -n "dir"]` to test if the value of dir is a number
+
+* 9_processmonitor uses a while statement that seems to act as long as the command exits 0
+
+* 7_traps shows how to have the script react based on SIGNALS are sent to it (otherwise the trap goes to the parent bash shell)
+** `trap "commands to run" EXIT` (EXIT is trap signal 5, ctrl+c, man 7 trap to see all)
