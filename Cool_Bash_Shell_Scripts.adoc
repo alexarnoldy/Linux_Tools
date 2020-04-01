@@ -1,0 +1,38 @@
+==== Instructor Sander van Vugt 
+
+* GH: https://github.com/sandervanvugt/cool-bash
+
+* mail@sandervanvugt.nl
+
+==== Generic notes
+
+* Gather CPU usage, PID, and process name, sort on highest CPU usage: `ps -eo pcpu,pid -o comm= | sort -k1 -n -r`
+
+* To run indefinitely: `while true` or `while :`
+
+* USAGE=${USAGE%.*} removes any decimal value from a number (makes it a whole number but without rounding)
+** Seems like % removes what follows it: `USAGE=${USAGE%??}` removes the last two characters
+*** Note sure why but `USAGE=${USAGE%*}` seems to increment the final digit
+
+* NOTE: When checking status of something, then processing the data, check once then process against that saved data
+** Otherwise the status might change between status checks
+
+* `[ $USAGE2 -gt 80 ] && [ $PID1 = $PID2 ] && mail -s "CPU load of $PNAME is above 80%"` 
+** If $USAGE2 is greater than 80 *then (and) if* $PID1 is equal to $PID2 *then* send an email
+
+* Can use `bash -x` (debug mode) to see what bash is executing
+
+==== Notes on scripts in GH
+
+* 1_cpu-hog does sorting and comparing two values gathered over time
+
+* 2_cv: Using bash tests. Check manpage for test
+----
+([ ! -e $1 ] && exit 52) || ([ -f $1 ] && vi $1) ||  cd $1 
+----
+** If the first argument to the command does not exist *then* exit with a status of 1, *else* if the argument is a file *then* vi the file, *else* cd to the directory
+** Need to research the difference between -z and -e
+** Take note that ()'s contain the different tests and what should be done if the test is true. That allows the ||'s to execute the next test
+** Can use any exit code and then be able to analyze or react to what caused the exit
+
+
