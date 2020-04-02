@@ -1,14 +1,14 @@
 ==== Check for open files and what users and processes have them open:
-* Per user: `lsof -u <username>`
+* Per user: `sudo lsof -u <username>`
 * Add `-R` to see parent processes
-* All network releated connections (associates file descriptor to socket): `lsof -i`
+* All network releated connections (associates file descriptor to socket): `sudo lsof -i`
 ** Can use `-i4` or `-i6` to limit output to v4 or v6
-** Can limit to a port range: `lsof -i :<begining port>-<ending port>`
+** Can limit to a port range: `sudo lsof -i :<begining port>-<ending port>`
 ** Very good test to see what IP's dnsmasq is listening on: `sudo lsof -i4 | grep dnsmasq`
 *** NOTE: Even if dnsmasq is listening on multiple IPs, it's configuration may limit processing requests from select interfaces
-* All files open by a PID: `lsof -p <PID>`
-* All proceses that have a file open: `lsof -t <absolute path of file>`
-* All open files and sub-directories under a directory (seems like might be useful for unmounting): `lsof +D <absolute path of directory>`
+* All files open by a PID: `sudo lsof -p <PID>`
+* All proceses that have a file open: `sudo lsof -t <absolute path of file>`
+* All open files and sub-directories under a directory (seems like might be useful for unmounting): `sudo lsof +D <absolute path of directory>`
 
 ==== Wait for something to happen before allowing a script to moving on:
 * Wait for ssh to be ready after rebooting a remote host: `until nc -zv $host 22; do sleep 5; done`

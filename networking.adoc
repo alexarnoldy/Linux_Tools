@@ -1,7 +1,7 @@
 ==== Using lsof to review network connections and daemons:
-* View all network releated connections (associates file descriptor to socket): `lsof -i`
+* View all network releated connections (associates file descriptor to socket): `sudo lsof -i`
 ** Can use `-i4` or `-i6` to limit output to v4 or v6
-** Can limit to a port range: `lsof -i :<begining port>-<ending port>`
+** Can limit to a port range: `sudo lsof -i :<begining port>-<ending port>`
 ** Very good test to see what IP's dnsmasq is listening on: `sudo lsof -i4 | grep dnsmasq`
 *** NOTE: Even if dnsmasq is listening on multiple IPs, it's configuration may limit processing requests from select interfaces
 
