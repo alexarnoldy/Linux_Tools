@@ -1,3 +1,18 @@
+==== Use nmap and ipcalc to find the resolvable hosts on an attached network:
+* Just the resolved hostnames:
+----
+nmap -sL $(ipcalc $(ip a | grep eth0$ | awk '{print$2}') | awk '/Network:/{print$2}') | grep \)$ | awk '{print$5}' 
+----
+* The IP address with hostnames:
+----
+nmap -sL $(ipcalc $(ip a | grep eth0$ | awk '{print$2}') | awk '/Network:/{print$2}') | grep \)$ | awk '{print$6$5}' | sed -e 's/(//' -e 's/)/\ /'
+----
+* Same as above but without ipcalc:
+----
+nmap -sL $(ip a | grep eth0$ | awk '{print$2}') | grep \)$ | awk '{print$6$5}' | sed -e 's/(//' -e 's/)/\ /'
+----
+
+
 ==== Check for open files and what users and processes have them open:
 * Per user: `sudo lsof -u <username>`
 * Add `-R` to see parent processes
