@@ -1,3 +1,12 @@
+==== SLES DNS server
+* Keeps records in /var/lib/named/master
+* Wildcard records (i.e. *.ses.local) can't be created with `yast dns-server`
+** Instead, edit the file directly (i.e. /var/lib/named/master/stable.suse.lab) and add a record similar to:
+----
+*.rados-gateway IN CNAME        rados-gateway.stable.suse.lab.
+----
+** Then restart named: `sudo systemctl restart named.service`
+
 ==== Working with hardened, minimized, and JeOS images:
 * A lot of functions require the `kernel-default` package `kernel-default-base` won't provide all of the needed pieces
 ** The resultant errors are nearly useless
