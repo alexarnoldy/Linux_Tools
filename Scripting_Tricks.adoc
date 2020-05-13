@@ -171,3 +171,8 @@ Agent pid 21425
 * Show the first field of every line that contains the expression "important=no": `snapper list | awk '/important=no/{print$1}'`
 * Show the entire line of every line that contains the expression "important=no": `snapper list | awk '/important=no/{print$0}'`
 ** Since print is the default action, the above is same as: `snapper list | awk '/important=no/'`
+* Print all but very first column: `awk '{$1=""; print $0}' somefile`
+* Print all but two first columns: `awk '{$1=$2=""; print $0}' somefile`
+* Print the number of columns in the line that starts with PUB_KEY: `awk '/^PUB_KEY/ {print NF}' somefile`
+* Print the last column: `awk '/^PUB_KEY/ {print$NF}' somefile` 
+
