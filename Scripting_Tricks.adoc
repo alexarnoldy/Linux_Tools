@@ -176,3 +176,11 @@ Agent pid 21425
 * Print the number of columns in the line that starts with PUB_KEY: `awk '/^PUB_KEY/ {print NF}' somefile`
 * Print the last column: `awk '/^PUB_KEY/ {print$NF}' somefile` 
 
+==== egrep
+
+.Use egrep as a test:
+* Takes the exit status of egrep and runs the second half if exit status is not zero
+** Note that the second half of the expression consists of two commands that get run as a whole if exit status is not zero:
+----
+egrep '^flags.*(vmx|svm)' /proc/cpuinfo || (echo CPU virtualization is not enabled; exit 9)
+----
