@@ -180,7 +180,17 @@ Agent pid 21425
 
 .Use egrep as a test:
 * Takes the exit status of egrep and runs the second half if exit status is not zero
-** Note that the second half of the expression consists of two commands that get run as a whole if exit status is not zero:
 ----
 egrep '^flags.*(vmx|svm)' /proc/cpuinfo || (echo CPU virtualization is not enabled; exit 9)
 ----
+** Note that the second half of the expression consists of two commands that get run as a whole if exit status is not zero:
+** Also note that using parentheses causes the contained commands to execute in a sub-shell, which loses its environment when the command series completes.
+*** This causes problems when setting variables as part of the command series
+* Using braces causes the contained commands to execute inside the current shell environment
+** One draw back is that braces-need-their-spaces. Space after { and before }
+** Another draw back is that the closing brace "}" needs to be preceded by a command separator, regardless of whether it's a newline, semicolon, or ampersand
+* The command above that doesn't spawn a sub-shell is:
+----
+egrep '^flags.*(vmx|svm)' /proc/cpuinfo || { echo CPU virtualization is not enabled; exit 9; }
+----
+
