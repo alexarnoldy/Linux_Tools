@@ -194,3 +194,15 @@ egrep '^flags.*(vmx|svm)' /proc/cpuinfo || (echo CPU virtualization is not enabl
 egrep '^flags.*(vmx|svm)' /proc/cpuinfo || { echo CPU virtualization is not enabled; exit 9; }
 ----
 
+==== while loop to validate input
+
+* Gathers input, then verifies the input is unique and breaks out of loop if it is
+** Note the test for exit 0 on the grep command, && executes its command set if zero, || executes its command set if non-zero
+*** Run a command then echo $? to see exit status' under different conditions
+----
+while :
+    do
+        read -p  "Create a unique name for the deployment of CaaS Platform clusters: " STACK_NAME
+        ls ${STATE_DIR}/ | grep -q ${STACK_NAME} && echo "That name is already in use. Please choose again." || break
+    done
+----
