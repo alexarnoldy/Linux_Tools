@@ -77,7 +77,7 @@ TIP: If it's not possible to attach the qcow2 image copy as an additional HDD to
 
 * If the image isn't running on a VM, use the following command on a KVM host to determine which paritions/filesystems need to be expanded:
 ** `IMAGE=<image.qcow2>`
-** `virt-filesystems --long -h --all -a $IMAGE`
+** `sudo virt-filesystems --long -h --all -a $IMAGE`
 * If the image is running on a VM, use df -h to determine which partition number need to be expanded
 ** Note that they may be /dev/vda* but the libvirt commands will refer to them as /dev/sda. 
    The most important thing is the partition number.
@@ -95,7 +95,8 @@ The variable below is a number, i.e. 2, plus a letter
   designator for megabytes, gigabytes, terabyes, i.e. G. 
 ** I.e. `export CAPACITY_TO_ADD=2G` would be used to add two gigabytes to the image:
 `export CAPACITY_TO_ADD=<#><M,G,T>`
-`sudo qemu-img resize $IMAGE +$CAPACITY_TO_ADD`
+
+* `sudo qemu-img resize $IMAGE +$CAPACITY_TO_ADD`
 
 * Verify the logical image size has grown, though the partitions have not:
 `sudo virt-filesystems --long -h --all -a $IMAGE`
@@ -103,7 +104,7 @@ The variable below is a number, i.e. 2, plus a letter
 TIP: Make sure you have enough space in a local filesystem to create an additional copy of the image. The image and the copy don't need to be inthe same filesystem.
 
 * Create a copy of the image as the source to migrate data from. This IS NOT the copy your created earlier for safe keeping:
-** `cp ${IMAGE} ${IMAGE}-orig`
+** `sudo cp ${IMAGE} ${IMAGE}-orig`
 * Expand the partition and filesystem, and migrate the data:
 `sudo virt-resize --expand /dev/sda${PARTITION_NUMBER} ${IMAGE}-orig ${IMAGE}`
 
