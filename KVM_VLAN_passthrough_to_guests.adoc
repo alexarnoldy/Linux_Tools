@@ -1,5 +1,35 @@
-#### CURRENT STATE OF THIS DOCUMENT: Needs refining and clarification. Needs to show how to do this with `yast lan` as it's much easier and persistent
 
+#### Config to pass tagged and untagged traffic to VM:
+
+
+  <VM with single NIC>
+(eth0)-VM-(vlan123@eth0)   
+  ||
+  ||
+  ||                    <VM with dual NICs>
+  ||              (eth0)-VM-(eth1)-(vlan123@eth1)   
+  ||               //         ||
+  ------------bridge------------
+                ||
+              bond0
+                ||
+              //  \\
+            eth0  eth1
+
+#### Config to pass native (untagged) VLAN traffic and a *tagged VLAN* as *untagged* traffic to a VM (requires dual NICs):
+
+
+        <VM with dual NICs>
+(eth0)----------VM------------(eth1)
+  ||                            ||   
+  ||                            || 
+  ----------1st bridge      2nd bridge
+                ||              ||
+              bond0-----------<VLAN>  <--- VLAN tag is removed here
+                ||                         VLAN device can be attached to bond or 1st bridge
+              //  \\                       i.e. vlan123@bond0 or vlan123@br0
+            eth0  eth1
+////
 ##### This doc shows how to allow VLAN tags to be passed up to the VM.
 * This useful when software explicitly requires VLANs to function correctly, when testing a bare-metal design that relies on VLANs, and when addressing multiple VLANs from the VM, while only having host one bridge for network access
 
@@ -24,6 +54,7 @@ net.bridge.bridge-nf-filter-vlan-tagged = 0
 `sysctl -p`
 
 ////
+////
 `zypper -n in bridge-utils`
 
 * To get brctl
@@ -37,6 +68,7 @@ net.bridge.bridge-nf-filter-vlan-tagged = 0
 * To get vconfig for configuring VLANs on the bridge
 ////
 
+////
 `zypper -n in bridge-utils net-tools-deprecated vlan`
 
 * To get brctl, ifconfig, and vconfig; respectively
@@ -78,7 +110,9 @@ net.bridge.bridge-nf-filter-vlan-tagged = 0
 `vconfig add $BRIDGE $VLAN`
 
 `ifconfig $BRIDGE.$VLAN up`
+/////
 
+////
 ////
 This didn't work. Seems like wicked gets unstable when changes are made outside of yast
 #### Creating VLANs and bridges without yast:
