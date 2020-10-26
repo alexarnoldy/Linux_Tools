@@ -6,8 +6,9 @@
 (eth0)-VM-(vlan123@eth0)   
   ||
   ||
-  ||                    <VM with dual NICs>
-  ||              (eth0)-VM-(eth1)-(vlan123@eth1)   
+  ||                    <VM with two NICs>
+  ||               (eth0)-VM-(eth1)-(vlan123@eth1)   
+  ||                //        ||
   ||               //         ||
   ------------bridge------------
                 ||
@@ -16,16 +17,16 @@
               //  \\
             eth0  eth1
 
-#### Config to pass native (untagged) VLAN traffic and a *tagged VLAN* as *untagged* traffic to a VM (requires dual NICs):
+#### Config to pass native (untagged) VLAN traffic and a *tagged VLAN* as *untagged* traffic to a VM (requires two NICs):
 
 
-        <VM with dual NICs>
+        <VM with two NICs>
 (eth0)----------VM------------(eth1)
   ||                            ||   
   ||                            || 
   ----------1st bridge      2nd bridge
                 ||              ||
-              bond0-----------<VLAN>  <--- VLAN tag is removed here
+              bond0-----------<VLAN>  <--- VLAN tag is removed (inbound) and added (outbound) here
                 ||                         VLAN device can be attached to bond or 1st bridge
               //  \\                       i.e. vlan123@bond0 or vlan123@br0
             eth0  eth1
