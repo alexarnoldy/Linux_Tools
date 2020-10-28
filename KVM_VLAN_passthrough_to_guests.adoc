@@ -1,7 +1,7 @@
 
 #### Config to pass tagged and untagged traffic to VM:
 
-
+----
   <VM with single NIC>
 (eth0)-VM-(vlan123@eth0)   
   ||
@@ -16,20 +16,23 @@
                 ||
               //  \\
             eth0  eth1
+----
 
 #### Config to pass native (untagged) VLAN traffic and a *tagged VLAN* as *untagged* traffic to a VM (requires two NICs):
 
-
+----
         <VM with two NICs>
 (eth0)----------VM------------(eth1)
   ||                            ||   
   ||                            || 
-  ----------1st bridge      2nd bridge
+  ----------1st bridge      2nd bridge <--- Only one bridge is allowed IP addresses to avoid network loops
                 ||              ||
-              bond0-----------<VLAN>  <--- VLAN tag is removed (inbound) and added (outbound) here
-                ||                         VLAN device can be attached to bond or 1st bridge
-              //  \\                       i.e. vlan123@bond0 or vlan123@br0
+              bond0-----------<VLAN>   <--- VLAN tag is removed (inbound) and added (outbound) here
+                ||                          VLAN device can be attached to bond or 1st bridge
+              //  \\                        i.e. vlan123@bond0 or vlan123@br0
             eth0  eth1
+----
+
 ////
 ##### This doc shows how to allow VLAN tags to be passed up to the VM.
 * This useful when software explicitly requires VLANs to function correctly, when testing a bare-metal design that relies on VLANs, and when addressing multiple VLANs from the VM, while only having host one bridge for network access
