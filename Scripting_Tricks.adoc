@@ -151,7 +151,17 @@ Agent pid 21425
 
 .Using sed to search for one string on a line, then modify a different part of the line:
 * The command below searches for lines beginning with a space, then adds a # at the beginning of the line
-`sed -e '/^\ / s/^#*/#/' <file>`
+----
+sed -e '/^\ / s/^#*/#/' <file>
+----
+* The command below transforms the output of ls to change the @, -, and . characters to underscore (good for using the output to create variables) NOTE that the substitutions are 1:1, the @ is repaced with the first _, the - is replaced with the second _, etc.:
+----
+ls infrastructure/ | sed 'y/@-./___/')
+----
+* The command below searches for lines beginning with two dots, then the word Destrouy in that line with the work Create:
+----
+sed -e '/^\.\./ s/Destroy/Create/' <file>
+----
 * The command bellow searches for lines containing the word driver, the substitutes the word overlay with the word vfs in any of those lines
 `sed -i '/driver/ s/overlay/vfs/' <file>`
 ** This avoids replacing other places where the word overlay occurs, i.e. overlayfs 
