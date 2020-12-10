@@ -35,6 +35,26 @@ sudo qemu-nbd --disconnect /dev/nbd0
 sudo rmmod nbd
 ----
 
+## Rebasing a deployed .qcow2 image
+
+NOTE: This is useful when you update a VM and want to roll those updates into a template used for automated deployments, i.e. with Terraform
+
+NOTE: This procedure can also be used to merge snapshots into a copy of the base image. In all cases this leaves the original backing/base image untouched.
+
+* Update and power down the VM
+* Use virsh dumpxml or virt-manager to find the name of disk image the VM is using
+** I.e. `virsh dumpxml SUSE-aiic-test-br241-router-0 | grep -C3 qcow`
+* Find the name of the base or backing image: `file <image name>`
+** I.e. `file SUSE-aiic-test-router-volume-0`
+
+CAUTION: Ensure the following cp command copies the backing image into a filesystem that has enough capacity to hold it and the primary image
+
+* Make a copy of the backing image (which will become the new merged image): `cp -p <base image> <merged image>`
+** I.e. `cp -p /var/lib/libvirt/images/vyos-router-template.qcow2 /var/lib/libvirt/images/vyos-router-template-20201209.qcow2`
+* Merge the primary image contents into the new image: `qemu-img rebase -b /var/lib/libvirt/images/vyos-router-template-20201209.qcow2 /var/lib/libvirt/images/test-router-volume-0`
+* Commit the primary image to the new merged image: ``
+
+
 ## Mounting and updating a SLES installed qcow2 image:
 
 NOTE: This procedure can be useful in cases where booting and updating an image is undesirable (i.e. when cloud init is installed and first boot hasn't occurred).
