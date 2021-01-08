@@ -49,10 +49,10 @@ NOTE: This procedure can also be used to merge snapshots into a copy of the base
 
 CAUTION: Ensure the following cp command copies the backing image into a filesystem that has enough capacity to hold it and the primary image
 
-* Make a copy of the backing image (which will become the new merged image): `cp -p <base image> <merged image>`
+* Make a copy of the backing image (which will become the destination for the new merged image): `cp -p <base image> <merged image>`
 ** I.e. `cp -p /var/lib/libvirt/images/vyos-router-template.qcow2 /var/lib/libvirt/images/vyos-router-template-20201209.qcow2`
 * Merge the primary image contents into the new image: `qemu-img rebase -b /var/lib/libvirt/images/vyos-router-template-20201209.qcow2 /var/lib/libvirt/images/test-router-volume-0`
-* Commit the primary image to the new merged image: ``
+* Commit the primary image to the new merged image: `qemu-img commit /var/lib/libvirt/images/test-router-volume-0`
 
 
 ## Mounting and updating a SLES installed qcow2 image:
