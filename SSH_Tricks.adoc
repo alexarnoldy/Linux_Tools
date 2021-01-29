@@ -28,7 +28,11 @@ Host <your problematic host>
 
 * Equivilent on the commandline: `ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null ${user}@${host}`
 
-
+.Add to .bashrc to autocomplete hosts in .ssh/known_hosts for ssh:
+----
+complete -W "$(echo `cat ~/.ssh/known_hosts | cut -f 1 -d ' ' | \
+    sed -e s/,.*//g | uniq | grep -v "\["`;)" ssh
+----
 
 // vim: set syntax=asciidoc:
 
