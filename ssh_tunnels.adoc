@@ -1,4 +1,5 @@
-Local (-L) versus remove (-R):
+## Local (-L) versus remove (-R):
+
 * (I believe this is true, but haven't tested it) Tunnels allow for one way access (forwarding) from one system to another.
 * Tunnel is always started from the system that runs the inital ssh command, but has nothing to do with local versus remote
 * Local is used when the same system that initiated the tunnel will use its own localhost, or IP address to access the tunnel
@@ -18,7 +19,7 @@ Local (-L) versus remove (-R):
 ** ssh -R 2222:d76767.nyc.example.com:22 -R 5432:postgres3.nyc.example.com:5432 aws4.mydomain.net
 *** Would allow the remote system to ssh to one system through its port 2222 and access a postgreSQL database through its port 5432
 
-ssh tunnel from the client to the server:
+## ssh tunnel from the client to the server:
 
 `ssh -f    -L 8080:localhost:80   root@remote-server   -N `
 Useful when wanting to create a secure connect between your client and a remote-server
@@ -28,10 +29,10 @@ Useful when wanting to create a secure connect between your client and a remote-
 * -f  runs in the background
 * -L  runs a listener/forwarder process on the local port (i.e. 8080)
 ** :localhost:80 Instructs the ssh process on the receiving server to forward the traffic to its port 80 
-* -N  says we are not running a command on the remote server
+* -N  creates the SSH session but doesn't open a shell on the remote server
 * w3m http://localhost:8080    - to browse to the entrance of the tunnel on port 8080, which is forwarded to port 80 on the remote-server
 
-ssh reverse tunnel:
+## ssh reverse tunnel:
 
 ssh -R 2222:localhost:22 root@ssh-reachable-server 
 
@@ -40,6 +41,18 @@ Useful when the server you want to reach is behind a firewall that blocks SSH, o
 * Can use the same switches as -L
 * Allows the  ssh-reachable-server (i.e. -R or remote) to ssh back into the firewalled host through its own localhost:2222
 
-Need to kill the ssh tunnel that is running the tunnel when done.
+Need to kill the ssh session that is running the tunnel when done.
+
+## HTTP(S) SOCKS proxy:
+.To preserve HTTP payloads, need to use an SSH SOCKS proxy:
+* From local system: `ssh -N -D 8080 <username>@<remote host>`
+
+NOTE: Remote host must be able to resolve hostnames and access HTTP(s) listeners for desired websites
+
+* On local browser, change SOCKS Host settings to "127.0.0.1" and port to "8080"
+
+IMPORTANT: This tunnels ALL browser traffic through the remote host. Great for working from unsecure locations (i.e. random wifi coffee shop) but allows logging web activity from the remote host to all websites.
+
+NOTE: Remember to close the session and disable SOCKS Host settings on the browser when done.
 
 // vim: set syntax=asciidoc:
