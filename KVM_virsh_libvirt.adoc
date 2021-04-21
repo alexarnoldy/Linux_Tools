@@ -224,6 +224,6 @@ polkit.addRule(function(action, subject) {
     </dhcp>
   </ip>
 ----
-
+* Note that it be neccessary to reboot the host to make the changes take effect
 
 // vim: set syntax=asciidoc:
