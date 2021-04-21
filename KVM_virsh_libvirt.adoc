@@ -212,6 +212,18 @@ polkit.addRule(function(action, subject) {
 });
 ----
 
+## Some options available with `sudo virsh net-edit <network name>`
+
+----
+  <domain name='sandbox.local'/>
+  <dns enable='yes'/>
+  <ip family='ipv4' address='10.111.2.1' prefix='24'>
+    <dhcp>
+      <range start='10.111.2.2' end='10.111.2.254'/>
+      <host mac='52:54:00:92:aa:d6' name='freetown-server-0' ip='10.111.2.11'/>
+    </dhcp>
+  </ip>
+----
 
 
 // vim: set syntax=asciidoc:
