@@ -63,4 +63,33 @@
 * Only BASH functions are available so can't do much more that change passwords and edit files
 * Have to externally reset the system
 
+==== Add a virtual IP address to an existing interface:
+
+* Set the following variable with the IP address and CIDR notation that will be used to access the Kubernetes API server:
+
+----
+SECOND_IP=""
+----
+
+** e.g., `SECOND_IP="10.111.2.100/24"`
+
+NOTE: If the target interface is not eth0, substitute the name of the interface in place of "eth0" in the commands below.
+
+----
+sudo cp -np /etc/sysconfig/network/ifcfg-eth0 ~/ifcfg-eth0.`date +"%d.%b.%Y.%H.%M"`
+cp -p ~/ifcfg-eth0.`date +"%d.%b.%Y"`* ~/ifcfg-eth0
+echo "IPADDR_2=${SECOND_IP}" >> ~/ifcfg-eth0
+diff /etc/sysconfig/network/ifcfg-eth0 ~/ifcfg-eth0
+----
+
+** Ensure the only difference between the original ifcfg-eth0 file and the updated ~/ifcfg-eth0 is the extra "IPADDR_2" line, then run the following commands:
+
+----
+sudo mv ~/ifcfg-eth0 /etc/sysconfig/network/ifcfg-eth0
+sudo systemctl restart network.service
+ip a
+----
+
+** The original server IP address and the additional IP address should be shown with the correct CIDR notation
+
 // vim: set syntax=asciidoc:
