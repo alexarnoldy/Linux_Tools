@@ -4,7 +4,7 @@
 ----
 CMD="ls ./infrastructure"; IFS=$'\n' read -r -d '' -a TEST_ARRAY < <( ${CMD} && printf '\0' )
 ----
-* Show the number of entries in an array: `echo "${#TEST_ARRAY[*]}"`
+* Show the number of entries in an array: `echo "${#TEST_ARRAY[*]}"` or  `echo "${#TEST_ARRAY[@]}"`
 * Arrays index from 0. Print the first value in the array: `echo "${TEST_ARRAY[0]}"`
 * Print all entries in the array: `echo "${TEST_ARRAY[*]}"`
 * Iterate over an array:
@@ -14,6 +14,15 @@ do
 	printf ${EACH}") " # Print the index number followed by right parenthesis and a space
 	echo "${TEST_ARRAY[EACH]}" # Print the contents of this array index
 done
+----
+
+Creating an array from a comma separated list:
+* Could also use IFS, but then need to change it back to default
+----
+myvar="string1,string2,string3"
+
+# Change comma (,) to whitespace and add under braces
+myarray=(`echo $myvar | tr ',' ' '`)
 ----
 
 ==== Menuing system that allows selecting and deselecting values from an array:
