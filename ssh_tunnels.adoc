@@ -41,6 +41,9 @@
 * Command is run on the host that cannot be reached via ssh (i.e. behind the firewall) so it can create an ESTABLISHED connection to root@ssh-reachable-server
 * Can use the same switches as -L
 * Allows the  ssh-reachable-server (i.e. -R or remote) to ssh back into the firewalled host through its own localhost:2222
+* Can use `0.0.0.0:2222:localhost:22` to make sshd monitor on all IPs 
+** By default it is only allowed to monitor on localhost
+** Set `GatewayPorts clientspecified` in /etc/ssh/sshd_config to enable
 
 Need to kill the ssh session that is running the tunnel when done.
 
