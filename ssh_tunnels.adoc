@@ -23,7 +23,7 @@
 
 IMPORTANT: Must ssh as root to monitor privileged ports (1000 and below). I.e. -L 0.0.0.0:443:localhost:443
 
-* CMD: `ssh -f    -L 8080:localhost:80   root@remote-server   -N `
+.CMD: `ssh -f    -L 8080:localhost:80   root@remote-server   -N `
 
 .Useful when wanting to create a secure connect between your client and a remote-server
 * Will only work if the remote-server can receive ssh connections 
