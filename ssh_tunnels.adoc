@@ -21,7 +21,9 @@
 
 ## ssh tunnel from the client to the server:
 
-`ssh -f    -L 8080:localhost:80   root@remote-server   -N `
+IMPORTANT: Must ssh as root to monitor privileged ports (1000 and below). I.e. -L 0.0.0.0:443:localhost:443
+
+* CMD: `ssh -f    -L 8080:localhost:80   root@remote-server   -N `
 
 .Useful when wanting to create a secure connect between your client and a remote-server
 * Will only work if the remote-server can receive ssh connections 
@@ -35,7 +37,9 @@
 
 ## ssh reverse tunnel:
 
-`ssh -R 2222:localhost:22 root@ssh-reachable-server`
+IMPORTANT: Must ssh as root to monitor privileged ports (1000 and below). I.e. -R 0.0.0.0:443:localhost:443
+
+* CMD: `ssh -R 2222:localhost:22 root@ssh-reachable-server`
 
 .Useful when the server you want to reach is behind a firewall that blocks SSH, or behind a NAT router
 * Command is run on the host that cannot be reached via ssh (i.e. behind the firewall) so it can create an ESTABLISHED connection to root@ssh-reachable-server
