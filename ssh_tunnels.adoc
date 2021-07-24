@@ -1,10 +1,11 @@
 ## Local (-L) versus remove (-R):
 
-* (I believe this is true, but haven't tested it) Tunnels allow for one way access (forwarding) from one system to another.
+* Tunnels allow for one way access (forwarding) from one system to another.
 * Tunnel is always started from the system that runs the inital ssh command, but has nothing to do with local versus remote
-* Local is used when the same system that initiated the tunnel will use its own localhost, or IP address to access the tunnel
+* Local is used when the same system that initiated the tunnel will use a port on its own localhost address, or IP address as the entry point for the tunnel
+** Note that if localhost is used, the tunnel can only be accessed from that host. If another IP address is used, other systems can send traffic to that IP:port as the entry point for the tunnel
 * Remote (or reverse) is used when the server that you're ssh'ing to will use its localhost, or IP to access the tunnel
-
+** Using 0.0.0.0:port is especially useful (but less secure) as it allows any system to access the tunnel on that side
 * -L and -R format are <IP to enter the tunnel>:<port to enter the tunnel>:<IP forwarded to on the other side of the tunnel>:<port forwarded to ...>
 ** Can omit first IP, which means anyone can access the tunnel through the receiving system's port
 ** Specifying the first IP restricts what system's can access the tunnel, but only if `GatewayPorts clientspecified` is set in the receiving server's sshd_config file
@@ -64,5 +65,12 @@ NOTE: Remote host must be able to resolve hostnames and access HTTP(s) listeners
 IMPORTANT: This tunnels ALL browser traffic through the remote host. Great for working from unsecure locations (i.e. random wifi coffee shop) but allows logging web activity from the remote host to all websites.
 
 NOTE: Remember to close the session and disable SOCKS Host settings on the browser when done.
+
+
+.Using a tunnel to ssh or scp through a jump host (great for systems behind a NAT router):
+* Create the tunnel: `ssh -L localhost:1234:<destination host IP>:22 -N <Jump Host IP> &`
+* SCP the file or directory: `scp -P 1234 -pr <path>/<file or directory> <desintation host username>@localhost:<destination path>`
+* Destroy the tunnel: `kill %1`
+
 
 // vim: set syntax=asciidoc:
