@@ -34,6 +34,12 @@ complete -W "$(echo `cat ~/.ssh/known_hosts | cut -f 1 -d ' ' | \
     sed -e s/,.*//g | uniq | grep -v "\["`;)" ssh
 ----
 
+.Verify the SHA256 has of a hosts sshd daemon (run on the host):
+----
+for pubkey_file in /etc/ssh/*.pub; do ssh-keygen -lf ${pubkey_file} -E sha256;  done
+----
+* If one of the keys returned doesn't match what your ssh session is showing for that host, something is very wrong!
+
 // vim: set syntax=asciidoc:
 
 
