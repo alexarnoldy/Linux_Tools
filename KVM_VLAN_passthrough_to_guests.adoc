@@ -25,7 +25,7 @@
 (eth0)----------VM------------(eth1)
   ||                            ||   
   ||                            || 
-  ----------1st bridge      2nd bridge <--- Only one bridge is allowed IP addresses to avoid network loops
+  ----------1st bridge      2nd bridge <--- Only one bridge is allowed to have IP addresses to avoid network loops
                 ||              ||
               bond0-----------<VLAN>   <--- VLAN tag is removed (inbound) and added (outbound) here
                 ||                          VLAN device can be attached to bond or 1st bridge
