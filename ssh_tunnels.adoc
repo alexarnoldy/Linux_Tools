@@ -67,9 +67,9 @@ IMPORTANT: This tunnels ALL browser traffic through the remote host. Great for w
 NOTE: Remember to close the session and disable SOCKS Host settings on the browser when done.
 
 
-.Using a tunnel to ssh or scp through a jump host (great for systems behind a NAT router):
-* Create the tunnel: `ssh -L localhost:1234:<destination host IP>:22 -N <Jump Host IP> &`
-* SCP the file or directory: `scp -P 1234 -pr <path>/<file or directory> <desintation host username>@localhost:<destination path>`
+## Using a tunnel to ssh or scp through a jump host (great for systems behind a NAT router):
+* Create the tunnel: `ssh -L localhost:1234:<destination host IP>:22 -N <Jump Host Username>@<Jump Host IP> &`
+* SCP the file or directory: `scp -P 1234 -pr <path>/<file or directory> <Desintation Host Username>@localhost:<destination path>`
 * Destroy the tunnel: `kill %1`
 
 
