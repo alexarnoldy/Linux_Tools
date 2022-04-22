@@ -71,6 +71,7 @@ NOTE: Remember to close the session and disable SOCKS Host settings on the brows
 * Create the tunnel: `ssh -L localhost:1234:<destination host IP>:22 -N <Jump Host Username>@<Jump Host IP> &`
 * SCP the file or directory: `scp -P 1234 -pr <path>/<file or directory> <Desintation Host Username>@localhost:<destination path>`
 * Destroy the tunnel: `kill %1`
+** Couldn't get this to work on a standard NAT router. Not sure why. Fell back to `scp -o ProxyJump=opensuse@kvm-host ~/.ssh/keypair.pem  opensuse@VM-behind-NAT-router:~/.ssh/`
 
 
 // vim: set syntax=asciidoc:
