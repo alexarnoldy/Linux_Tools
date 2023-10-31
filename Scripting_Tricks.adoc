@@ -1,4 +1,4 @@
-==== Creating code blocks that can be copied in whole and pasted to the command line without editing:
+=== Creating code blocks that can be copied in whole and pasted to the command line without editing:
 * Create an ascidoc anchor to step 1:
 
 Step 1[[step_1]]: Create/set these variables
@@ -34,7 +34,7 @@ DRIVER_TYPE=${DRIVER_TYPE}" && echo && read -n1 -p "Press Ctrl+c now if these va
 sudo podman build ....
 ----
 
-==== Using arrays in BASH
+=== Using arrays in BASH
 * Create an array: `TEST_ARRAY=(one two three)`
 ** Create an array with a command: 
 ----
@@ -61,7 +61,7 @@ myvar="string1,string2,string3"
 myarray=(`echo $myvar | tr ',' ' '`)
 ----
 
-==== Menuing system that allows selecting and deselecting values from an array:
+=== Menuing system that allows selecting and deselecting values from an array:
 
 ----
 IFS=$'\n' read -r -d '' -a options < <( ls ./infrastructure && printf '\0' )
@@ -94,7 +94,7 @@ for EACH in ${!options[@]}; do
 done
 ----
 
-==== Simpler menuing system that allows selecting any combination of elements in an array
+=== Simpler menuing system that allows selecting any combination of elements in an array
 * The case statement also parses combinations of inputs such as 1, 1 2 3, and 1..3:
 ----
 IFS=$'\n' read -r -d '' -a ALL_KVM_HOSTS < <( ls ./infrastructure && printf '\0' )
@@ -127,7 +127,7 @@ case ${SELECTED_KVM_HOSTS} in
 esac
 ----
 
-==== Use nmap and ipcalc to find the resolvable hosts on an attached network:
+=== Use nmap and ipcalc to find the resolvable hosts on an attached network:
 * Just the resolved hostnames:
 ----
 nmap -sL $(ipcalc $(ip a | grep eth0$ | awk '{print$2}') | awk '/Network:/{print$2}') | grep \)$ | awk '{print$5}' 
@@ -142,7 +142,7 @@ nmap -sL $(ip a | grep eth0$ | awk '{print$2}') | grep \)$ | awk '{print$6$5}' |
 ----
 
 
-==== Check for open files and what users and processes have them open:
+=== Check for open files and what users and processes have them open:
 * Per user: `sudo lsof -u <username>`
 * Add `-R` to see parent processes
 * All network releated connections (associates file descriptor to socket): `sudo lsof -i`
@@ -154,11 +154,11 @@ nmap -sL $(ip a | grep eth0$ | awk '{print$2}') | grep \)$ | awk '{print$6$5}' |
 * All proceses that have a file open: `sudo lsof -t <absolute path of file>`
 * All open files and sub-directories under a directory (seems like might be useful for unmounting): `sudo lsof +D <absolute path of directory>`
 
-==== Wait for something to happen before allowing a script to moving on:
+=== Wait for something to happen before allowing a script to moving on:
 * Wait for ssh to be ready after rebooting a remote host: `until nc -zv $host 22; do sleep 5; done`
 * Wait for NFS server to be ready: `until sudo showmount -e; do echo "NFS server not ready" && sleep 5; done`
 
-==== eval command:
+=== eval command:
 * Can be used to create a variable that contains a command set and then execute the command set later, i.e. 
 as the result of conditional test.
 ----
@@ -192,7 +192,7 @@ Agent pid 21425
 ** eval runs those commands, including the final echo
 
 
-==== sed 
+=== sed 
 
 .Using sed to search for one string on a line, then modify a different part of the line:
 * The command below searches for lines beginning with a space, then adds a # at the beginning of the line
@@ -240,7 +240,7 @@ system_domain: scf.caasp.local
 sed -i "/key/ r ${SITE_KEY_FILE_NAME}.indented" myfile.yaml
 ----
 
-==== awk
+=== awk
 
 .Instead of `grep | awk`, can use awk to do both:
 * Show the first field of every line that contains the expression "important=no": `snapper list | awk '/important=no/{print$1}'`
@@ -251,7 +251,7 @@ sed -i "/key/ r ${SITE_KEY_FILE_NAME}.indented" myfile.yaml
 * Print the number of columns in the line that starts with PUB_KEY: `awk '/^PUB_KEY/ {print NF}' somefile`
 * Print the last column: `awk '/^PUB_KEY/ {print$NF}' somefile` 
 
-==== egrep
+=== egrep
 
 .Use egrep as a test:
 * Takes the exit status of egrep and runs the second half if exit status is not zero
@@ -269,7 +269,7 @@ egrep '^flags.*(vmx|svm)' /proc/cpuinfo || (echo CPU virtualization is not enabl
 egrep '^flags.*(vmx|svm)' /proc/cpuinfo || { echo CPU virtualization is not enabled; exit 9; }
 ----
 
-==== while loop to validate input
+=== while loop to validate input
 
 * Gathers input, then verifies the input is unique and breaks out of loop if it is
 ** Note the test for exit 0 on the grep command, && executes its command set if zero, || executes its command set if non-zero
