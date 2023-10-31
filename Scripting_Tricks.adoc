@@ -15,6 +15,7 @@ read -p "Provide the Nvidia GPU Operator version (e.g. v23.6.1): " OPERATOR_VERS
 ----
 
 * Ensure each command has a note that links back to step 1 in case the variables are empty or not set correctly:
+
 NOTE: If any of the following variables are not set correctly, press `Ctrl+c` and return to <<step_1, Step 1>> in this process before continuing
 
 * Each command validates the variables before consuming them:
