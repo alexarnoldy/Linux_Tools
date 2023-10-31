@@ -1,3 +1,38 @@
+==== Creating code blocks that can be copied in whole and pasted to the command line without editing:
+* Create an ascidoc anchor to step 1:
+
+Step 1[[step_1]]: Create/set these variables
+
+* Create the variables:
+[console, bash]
+----
+## Set the variables that will be used throughout this procedure
+echo &&
+read -p "Provide the URL of the registry where the new image will be saved: " REGISTRY &&
+read -p "Enter the number for the SLE 15 service pack to be used for the container image (i.e. 5 for SP5): " SLE15_SP_VERSION &&
+read -p "Provide the Nvidia GPU driver version (e.g. 535.104.05): " DRIVER_VERSION &&
+read -p "Provide the Nvidia GPU Operator version (e.g. v23.6.1): " OPERATOR_VERSION &&
+----
+
+* Ensure each command has a note that links back to step 1 in case the variables are empty or not set correctly:
+NOTE: If any of the following variables are not set correctly, press `Ctrl+c` and return to <<step_1, Step 1>> in this process before continuing
+
+* Each command validates the variables before consuming them:
+
+[console, bash]
+----
+## Validate the variables before using them in the subsequent command
+echo &&
+echo "
+REGISTRY=${REGISTRY}
+SLE15_SP_VERSION=${SLE15_SP_VERSION}
+DRIVER_VERSION=${DRIVER_VERSION}
+DRIVER_TYPE=${DRIVER_TYPE}" && echo && read -n1 -p "Press Ctrl+c now if these variables are NOT correct, otherwise press Enter" BAILOUT &&
+
+## Build the Nvidia GPU driver container
+sudo podman build ....
+----
+
 ==== Using arrays in BASH
 * Create an array: `TEST_ARRAY=(one two three)`
 ** Create an array with a command: 
