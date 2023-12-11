@@ -4,7 +4,7 @@
 Step 1[[step_1]]: Create/set these variables
 
 * Create the variables, put them in a file and source the file:
-[console, bash]
+[source, console, subs="attributes+"]
 ----
 ## Set the variables that will be used throughout this procedure
 echo &&
