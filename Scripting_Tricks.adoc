@@ -3,7 +3,7 @@
 
 Step 1[[step_1]]: Create/set these variables
 
-* Create the variables:
+* Create the variables, put them in a file and source the file:
 [console, bash]
 ----
 ## Set the variables that will be used throughout this procedure
@@ -12,6 +12,36 @@ read -p "Provide the URL of the registry where the new image will be saved: " RE
 read -p "Enter the number for the SLE 15 service pack to be used for the container image (i.e. 5 for SP5): " SLE15_SP_VERSION &&
 read -p "Provide the Nvidia GPU driver version (e.g. 535.104.05): " DRIVER_VERSION &&
 read -p "Provide the Nvidia GPU Operator version (e.g. v23.6.1): " OPERATOR_VERSION &&
+
+echo "export ${REGISTRY}" > /tmp/.build-variables.sh
+echo "export ${SLE15_SP_VERSION}" >> /tmp/.build-variables.sh
+echo "export ${DRIVER_VERSION}" >> /tmp/.build-variables.sh
+echo "export ${OPERATOR_VERSION}" >> /tmp/.build-variables.sh
+
+source /tmp/.build-variables.sh
+----
+
+[TIP]
+====
+Disconnecting from your current terminal environment will cause the variables to be lost.
+Repeat the following step to set the variables again.
+====
+//
++
+[IMPORTANT]
+====
+After setting and sourcing the variables, you will be able to copy and paste the entire code blocks from this document to the command line and execute them without editing.
+
+For the best results, be sure and execute each code block in its entirety as a single command set.
+====
+//
++
+. Source the variables into your current terminal environment:
+//
++
+[console, bash]
+----
+source /tmp/.build-variables.sh
 ----
 
 * Ensure each command has a note that links back to step 1 in case the variables are empty or not set correctly:
