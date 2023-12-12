@@ -41,10 +41,9 @@ For the best results, be sure and execute each code block in its entirety as a s
 . Source the variables into your current terminal environment:
 //
 +
-[console, bash]
-----
+```
 source /tmp/.build-variables.sh
-----
+```
 
 * Ensure each command has a note that links back to step 1 in case the variables are empty or not set correctly:
 
@@ -52,8 +51,7 @@ NOTE: If any of the following variables are not set correctly, press `Ctrl+c` an
 
 * Each command validates the variables before consuming them:
 
-[console, bash]
-----
+```
 ## Validate the variables before using them in the subsequent command
 echo &&
 echo "
@@ -64,7 +62,7 @@ DRIVER_TYPE=${DRIVER_TYPE}" && echo && read -n1 -p "Press Ctrl+c now if these va
 
 ## Build the Nvidia GPU driver container
 sudo podman build ....
-----
+```
 
 === Using arrays in BASH
 * Create an array: `TEST_ARRAY=(one two three)`
