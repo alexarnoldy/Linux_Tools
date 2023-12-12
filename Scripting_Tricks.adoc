@@ -4,8 +4,9 @@
 Step 1[[step_1]]: Create/set these variables
 
 * Create the variables, put them in a file and source the file:
-[source, console, subs="attributes+"]
-----
+//[source, console, subs="attributes+"]
+//----
+```
 ## Set the variables that will be used throughout this procedure
 echo &&
 read -p "Provide the URL of the registry where the new image will be saved: " REGISTRY &&
@@ -19,7 +20,8 @@ echo "export DRIVER_VERSION=${DRIVER_VERSION}" >> /tmp/.build-variables.sh &&
 echo "export OPERATOR_VERSION=${OPERATOR_VERSION}" >> /tmp/.build-variables.sh &&
 
 source /tmp/.build-variables.sh
-----
+```
+//----
 
 [TIP]
 ====
