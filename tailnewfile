@@ -1,0 +1,31 @@
+## This function monitors for a new log file to be created (as in after a pod is started) and does a tail -f on that log file.
+tailnewfile () {
+#!/bin/bash
+
+# Directory to monitor
+DIRECTORY="/var/log/containers/"
+
+# Prefix of the new file
+PREFIX="kube-apiserver"
+
+# Track existing files
+existing_files=$(ls "$DIRECTORY")
+
+while true; do
+  # Get the list of current files
+  current_files=$(ls "$DIRECTORY")
+  
+  # Compare the current files with the existing files
+  for file in $current_files; do
+    if [[ ! "$existing_files" =~ "$file" ]] && [[ "$file" == $PREFIX* ]]; then
+      echo "New file detected: $file"
+      tail -f "$DIRECTORY/$file"
+      # Update the list of existing files
+      existing_files=$current_files
+    fi
+  done
+  
+  # Wait for a while before checking again
+  sleep 2
+done
+}
